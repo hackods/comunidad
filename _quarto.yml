@@ -9,12 +9,3 @@ jupyter: python3
 format:
   closeread-html:
     remove-header-space: true
-    embed-resources: true
-    cr-style:
-      narrative-background-color-overlay: "rgba(15, 23, 42, 0.92)"
-      narrative-text-color-overlay: "#f1f5f9"
-      narrative-background-color-sidebar: "rgba(15, 23, 42, 0.95)"
-      narrative-text-color-sidebar: "#f1f5f9"
-      narrative-border-radius: "12px"
-      narrative-font-size: "1.15rem"
-      section-background-color: "#0f172a"

@@ -4,119 +4,22 @@ subtitle: "A scrollytelling journey through 150 changemakers"
 jupyter: python3
 ---
 
-```{=html}
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background-color: #0f172a;
-    color: #e2e8f0;
-  }
-  h1, h2, h3, h4 {
-    font-family: 'Space Grotesk', sans-serif;
-    color: #f1f5f9;
-  }
-  #quarto-document-content { background-color: #0f172a; }
-  .cr-section .narrative-col { z-index: 10; }
-  .narrative { font-family: 'Inter', sans-serif; line-height: 1.75; }
-
-  .hero-box {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; min-height: 80svh; gap: 1rem; text-align: center;
-  }
-  .hero-title {
-    font-family: 'Space Grotesk'; font-size: 3.5rem; font-weight: 700;
-    background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text; line-height: 1.15;
-  }
-  .hero-sub { font-size: 1.3rem; color: #94a3b8; font-weight: 300; }
-  .big-num {
-    font-family: 'Space Grotesk'; font-size: 9rem; font-weight: 700;
-    background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text; line-height: 1;
-  }
-  .big-label { font-size: 1.4rem; color: #94a3b8; font-weight: 300; }
-  .fun-fact {
-    background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(129,140,248,0.12));
-    border-left: 4px solid #818cf8; padding: 1rem 1.5rem;
-    border-radius: 0 12px 12px 0; font-style: italic; color: #cbd5e1;
-  }
-  .closing-badges {
-    display: flex; gap: 0.7rem; flex-wrap: wrap;
-    justify-content: center; margin-top: 1.5rem;
-  }
-  .badge {
-    padding: 0.5rem 1.1rem; border-radius: 999px;
-    font-size: 0.85rem; font-weight: 600;
-  }
-
-  /* Force Plotly charts to fill their container */
-  .js-plotly-plot, .plotly, .plot-container {
-    width: 100% !important;
-  }
-  .js-plotly-plot .plotly .main-svg {
-    width: 100% !important;
-  }
-
-  /* ---------- MOBILE RESPONSIVE ---------- */
-  @media (max-width: 768px) {
-    .hero-title { font-size: 2rem; }
-    .hero-sub { font-size: 1rem; }
-    .big-num { font-size: 5rem; }
-    .big-label { font-size: 1rem; }
-    .hero-box { min-height: 60svh; padding: 1rem; }
-    .fun-fact { padding: 0.8rem 1rem; font-size: 0.9rem; }
-    .closing-badges { gap: 0.4rem; }
-    .badge { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
-
-    /* Plotly containers: prevent overflow */
-    .cell-output-display {
-      overflow-x: hidden !important;
-      width: 100% !important;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .hero-title { font-size: 1.6rem; }
-    .big-num { font-size: 3.5rem; }
-    .big-label { font-size: 0.85rem; }
-  }
-</style>
-```
-
-
 ```{python}
 #| echo: false
 #| output: false
 
 import plotly.graph_objects as go
-import plotly.express as px
+import plotly.io as pio
 import pandas as pd
+import math
 
-# ---------- shared layout template ----------
-dark_template = dict(
-    paper_bgcolor="rgba(30, 41, 59, 0.75)",
-    plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="Inter, sans-serif", color="#e2e8f0", size=12),
-    title_font=dict(family="Space Grotesk, sans-serif", size=18, color="#f1f5f9"),
-    margin=dict(l=10, r=10, t=50, b=20),
-    autosize=True,
-)
-
-plotly_config = {"responsive": True, "displayModeBar": False}
-
-def show(fig):
-    """Show a Plotly figure with responsive config."""
-    fig.show(config=plotly_config)
+# Force Plotly to use the classic renderer (not ES modules)
+pio.renderers.default = "notebook_connected"
 
 # ============================================================
 # DATA
 # ============================================================
 
-# Gender
 gender_df = pd.DataFrame({
     "Gender": ["Female", "Male", "Non-binary"],
     "Count": [68, 62, 20],
@@ -124,7 +27,6 @@ gender_df = pd.DataFrame({
 })
 gender_df["Pct"] = (gender_df["Count"] / 150 * 100).round(1)
 
-# Careers
 career_df = pd.DataFrame({
     "Career": ["Software Engineering", "Data Science", "Environmental Science",
                "Design / UX", "Marketing & Comms", "Business & Management",
@@ -135,16 +37,13 @@ career_df = pd.DataFrame({
 career_colors = ["#818cf8","#818cf8","#34d399","#f472b6","#fbbf24",
                  "#38bdf8","#fb923c","#a78bfa","#f87171","#c084fc","#86efac","#67e8f9"]
 
-# Python
 python_df = pd.DataFrame({
     "Level": ["Expert", "Advanced", "Intermediate", "Beginner"],
     "Count": [20, 40, 55, 35],
     "Color": ["#15803d", "#22c55e", "#4ade80", "#86efac"],
-    "Emoji": ["🐍", "🌳", "🌿", "🌱"]
 })
 python_df["Pct"] = (python_df["Count"] / 150 * 100).round(0).astype(int)
 
-# SDGs
 sdg_df = pd.DataFrame({
     "SDG": ["13: Climate Action", "4: Quality Education", "6: Clean Water",
             "7: Affordable Energy", "3: Good Health", "5: Gender Equality",
@@ -153,76 +52,62 @@ sdg_df = pd.DataFrame({
     "Votes": [32, 22, 18, 15, 14, 12, 10, 8, 7, 6, 3, 3],
     "Color": ["#3F7E44","#C5192D","#26BDE2","#FCC30B","#4C9F38","#FF3A21",
               "#FD9D24","#DDA63A","#0A97D9","#56C02B","#E5243B","#BF8B2E"],
-    "Icon": ["🌍","📚","💧","⚡","💚","⚖️","🏙️","🍽️","🐠","🌲","🏠","♻️"]
 })
 
-# Beverages
 bev_df = pd.DataFrame({
-    "Drink": ["Water 💧", "Coffee ☕", "Tea 🍵", "Soda 🥤", "Juice 🧃", "Energy ⚡"],
+    "Drink": ["Water", "Coffee", "Tea", "Soda", "Juice", "Energy"],
     "Liters": [2100, 525, 300, 150, 120, 45],
     "PerPerson": [14.0, 3.5, 2.0, 1.0, 0.8, 0.3],
     "Color": ["#38bdf8", "#92400e", "#65a30d", "#dc2626", "#f59e0b", "#10b981"]
 })
 
-# Transport
 transport_df = pd.DataFrame({
-    "Mode": ["Car 🚗", "Bus & Transit 🚌", "Walking 🚶", "Bicycle 🚲"],
+    "Mode": ["Car", "Bus & Transit", "Walking", "Bicycle"],
     "TotalKm": [6750, 4500, 2250, 1500],
     "PerPerson": [45, 30, 15, 10],
     "Color": ["#ef4444", "#f59e0b", "#22c55e", "#3b82f6"]
 })
 
-# SDG Words
-words_df = pd.DataFrame({
-    "Word": ["Future","Hope","Action","Together","Planet","Change","Justice",
-             "Climate","Green","Equality","Water","Education","Innovation",
-             "Community","Sustainability","Clean","Health","Peace","Nature",
-             "Responsibility","Resilience","Energy","Dignity","Oceans",
-             "Forests","Empowerment","Biodiversity","Circular","Equity","Solidarity"],
-    "Mentions": [48,44,42,40,38,36,34,33,31,30,28,27,26,25,24,22,21,20,19,
-                 18,17,16,15,14,14,13,12,11,11,10]
-})
+words_data = [
+    ("Future",48),("Hope",44),("Action",42),("Together",40),("Planet",38),
+    ("Change",36),("Justice",34),("Climate",33),("Green",31),("Equality",30),
+    ("Water",28),("Education",27),("Innovation",26),("Community",25),
+    ("Sustainability",24),("Clean",22),("Health",21),("Peace",20),("Nature",19),
+    ("Responsibility",18),("Resilience",17),("Energy",16),("Dignity",15),
+    ("Oceans",14),("Forests",14),("Empowerment",13),("Biodiversity",12),
+    ("Circular",11),("Equity",11),("Solidarity",10),
+]
 
-# Funny Q1: Renewable Energy
 energy_df = pd.DataFrame({
-    "Source": ["Solar ☀️", "Wind 🌬️", "Hydro 🌊", "Geothermal 🌋", "Biomass 🌿"],
+    "Source": ["Solar", "Wind", "Hydro", "Geothermal", "Biomass"],
     "Votes": [52, 38, 28, 18, 14],
     "Color": ["#fbbf24", "#93c5fd", "#38bdf8", "#f87171", "#86efac"]
 })
 
-# Funny Q2: Spirit Animal
 animal_df = pd.DataFrame({
-    "Animal": ["Sloth 🦥", "Owl 🦉", "Golden Retriever 🐕", "Cat 🐱", "Parrot 🦜", "Penguin 🐧"],
+    "Animal": ["Sloth", "Owl", "Golden Retriever", "Cat", "Parrot", "Penguin"],
     "Votes": [35, 32, 28, 25, 18, 12],
     "Color": ["#a78bfa", "#818cf8", "#fbbf24", "#f97316", "#22d3ee", "#e2e8f0"]
 })
 
-# Funny Q3: Houseplants
 plant_df = pd.DataFrame({
-    "Range": ["0 (Plant Whisperer)", "1 – 3 plants", "4 – 7 plants", "8+ plants", "Lost count 💀"],
+    "Range": ["0 (Plant Whisperer)", "1-3 plants", "4-7 plants", "8+ plants", "Lost count"],
     "Count": [22, 45, 38, 25, 20],
     "Color": ["#22c55e", "#86efac", "#fbbf24", "#f97316", "#ef4444"],
-    "Icon": ["🌱", "🌿", "🍂", "🍃", "💀"]
 })
 ```
 
-
-<!-- ============================================================ -->
-<!-- HERO -->
-<!-- ============================================================ -->
 
 :::{.cr-section layout="overlay-center"}
 
 @cr-hero
 
 :::{#cr-hero}
-```{=html}
-<div class="hero-box">
-  <div class="hero-title">Who Are We?</div>
-  <div class="hero-sub">A data journey through 150 changemakers</div>
-  <div style="margin-top:2rem; color:#475569; font-size:0.85rem;">&#8595; Scroll to explore &#8595;</div>
-</div>
-```
+
+# Who Are We?
+
+*A data journey through 150 changemakers*
+
 :::
 
 :::
@@ -235,82 +120,58 @@ We are **150 people** organized in **50 teams** of 3, united by one mission: bui
 But numbers alone don't tell our story. Let's scroll through who we really are. @cr-bignum
 
 :::{#cr-bignum}
-```{=html}
-<div class="hero-box">
-  <div class="big-num">150</div>
-  <div class="big-label">people &middot; 50 teams &middot; 1 mission</div>
-</div>
-```
-:::
+
+# 150
+
+*people · 50 teams · 1 mission*
 
 :::
 
+:::
 
-<!-- ============================================================ -->
-<!-- GENDER -->
-<!-- ============================================================ -->
-
-:::{.cr-section layout="sidebar-left"}
 
 ## Our Voices
 
-What does our group look like? Let's see the breakdown. @cr-gender
+:::{.cr-section}
+
+What does our group look like? @cr-gender
 
 **68 women (45.3%)** form the largest group. @cr-gender
 
 **62 men (41.3%)** are close behind. @cr-gender
 
-And **20 non-binary people (13.3%)** enrich our perspectives. A group is only as strong as its diversity of thought. @cr-gender
+And **20 non-binary people (13.3%)** enrich our perspectives. @cr-gender
 
 :::{#cr-gender}
 ```{python}
 #| echo: false
 fig = go.Figure()
-
 fig.add_trace(go.Bar(
-    y=gender_df["Gender"],
-    x=gender_df["Count"],
-    orientation="h",
-    marker=dict(
-        color=gender_df["Color"],
-        cornerradius=8,
-    ),
-    text=[f"  {c}  ({p}%)" for c, p in zip(gender_df["Count"], gender_df["Pct"])],
+    y=gender_df["Gender"], x=gender_df["Count"], orientation="h",
+    marker_color=gender_df["Color"],
+    text=[f"{c} ({p}%)" for c, p in zip(gender_df["Count"], gender_df["Pct"])],
     textposition="outside",
-    textfont=dict(size=13, family="Space Grotesk", color="#e2e8f0"),
-    hovertemplate="%{y}: %{x} people<extra></extra>",
 ))
-
-fig.update_layout(
-    **dark_template,
-    title="Gender Composition",
-    xaxis=dict(title="", gridcolor="rgba(148,163,184,0.1)", range=[0, 85]),
-    yaxis=dict(title="", autorange="reversed", automargin=True),
-    height=350,
-    showlegend=False,
-)
-show(fig)
+fig.update_layout(title="Gender Composition",
+                  yaxis=dict(autorange="reversed"), showlegend=False)
+fig.show()
 ```
 :::
 
 :::
 
 
-<!-- ============================================================ -->
-<!-- CAREERS -->
-<!-- ============================================================ -->
-
-:::{.cr-section layout="sidebar-right"}
-
 ## What Do We Do?
+
+:::{.cr-section}
 
 We come from **12 different career fields**. Sustainability needs every discipline. @cr-careers
 
-**Software Engineers (28)** and **Data Scientists (24)** lead the pack — we're a tech-savvy crowd. @cr-careers
+**Software Engineers (28)** and **Data Scientists (24)** lead the pack. @cr-careers
 
-**Environmental Scientists (18)**, **Designers (16)**, and **Marketers (14)** keep us grounded in the real world. @cr-careers
+**Environmental Scientists (18)**, **Designers (16)**, and **Marketers (14)** keep us grounded. @cr-careers
 
-From **Public Policy** to **Agriculture** to **Journalism** — every voice shapes the narrative of change. @cr-careers
+From **Public Policy** to **Agriculture** to **Journalism** --- every voice matters. @cr-careers
 
 :::{#cr-careers}
 ```{python}
@@ -320,511 +181,306 @@ sorted_colors = list(reversed(career_colors))
 
 fig = go.Figure()
 fig.add_trace(go.Bar(
-    y=sorted_career["Career"],
-    x=sorted_career["Count"],
-    orientation="h",
-    marker=dict(color=sorted_colors, cornerradius=6),
-    text=[f"  {c}" for c in sorted_career["Count"]],
-    textposition="outside",
-    textfont=dict(size=13, family="Space Grotesk", color="#e2e8f0"),
-    hovertemplate="%{y}: %{x} people<extra></extra>",
+    y=sorted_career["Career"], x=sorted_career["Count"], orientation="h",
+    marker_color=sorted_colors,
+    text=sorted_career["Count"], textposition="outside",
 ))
-
-fig.update_layout(
-    **dark_template,
-    title="12 Career Fields",
-    xaxis=dict(title="", gridcolor="rgba(148,163,184,0.1)", range=[0, 35]),
-    yaxis=dict(title="", automargin=True),
-    height=480,
-    showlegend=False,
-)
-show(fig)
+fig.update_layout(title="12 Career Fields", showlegend=False)
+fig.show()
 ```
 :::
 
 :::
 
 
-<!-- ============================================================ -->
-<!-- PYTHON KNOWLEDGE -->
-<!-- ============================================================ -->
-
-:::{.cr-section layout="sidebar-left"}
-
 ## Python Knowledge
+
+:::{.cr-section}
 
 In the age of data, how well do we speak **Python**? @cr-python
 
-**35 Beginners (23%)** — `print("hello world")` never felt so good. @cr-python
+**35 Beginners (23%)** --- `print("hello world")` never felt so good. @cr-python
 
-**55 Intermediates (37%)** can wrangle a pandas DataFrame without crying (most of the time). The largest group! @cr-python
+**55 Intermediates (37%)** --- the largest group! @cr-python
 
-**40 Advanced (27%)** write decorators in their sleep. **20 Experts (13%)** dream in list comprehensions. Together, **77% of us are Intermediate or above**. @cr-python
+**40 Advanced (27%)** and **20 Experts (13%)** --- together **77% are Intermediate or above**. @cr-python
 
 :::{#cr-python}
 ```{python}
 #| echo: false
 fig = go.Figure()
-
 fig.add_trace(go.Bar(
-    y=python_df["Level"],
-    x=python_df["Count"],
-    orientation="h",
-    marker=dict(color=python_df["Color"], cornerradius=8),
-    text=[f"  {e} {c} ({p}%)" for e, c, p in
-          zip(python_df["Emoji"], python_df["Count"], python_df["Pct"])],
+    y=python_df["Level"], x=python_df["Count"], orientation="h",
+    marker_color=python_df["Color"],
+    text=[f"{c} ({p}%)" for c, p in zip(python_df["Count"], python_df["Pct"])],
     textposition="outside",
-    textfont=dict(size=12, family="Space Grotesk", color="#e2e8f0"),
-    hovertemplate="%{y}: %{x} people<extra></extra>",
 ))
-
-fig.update_layout(
-    **dark_template,
-    title="Python Proficiency",
-    xaxis=dict(title="", gridcolor="rgba(148,163,184,0.1)", range=[0, 75]),
-    yaxis=dict(title="", automargin=True),
-    height=340,
-    showlegend=False,
-    annotations=[dict(
-        text="77% are Intermediate or above",
-        xref="paper", yref="paper", x=0.5, y=-0.06,
-        showarrow=False, font=dict(size=11, color="#64748b")
-    )]
-)
-show(fig)
+fig.update_layout(title="Python Proficiency", showlegend=False)
+fig.show()
 ```
 :::
 
 :::
 
 
-<!-- ============================================================ -->
-<!-- SDGs -->
-<!-- ============================================================ -->
+## Favorite SDGs
 
 :::{.cr-section layout="overlay-center"}
 
-## Favorite Sustainable Development Goals
-
 We asked: **"Which SDG is closest to your heart?"** @cr-sdg
 
-The overwhelming favorite: **SDG 13 — Climate Action** with 32 votes. The climate crisis connects everything. @cr-sdg
+**SDG 13 --- Climate Action** won with 32 votes. @cr-sdg
 
-**Quality Education (22)** and **Clean Water (18)** round out the top 3. Knowledge and water: the two things no one can live without. @cr-sdg
+**Quality Education (22)** and **Clean Water (18)** round out the top 3. @cr-sdg
 
-Our passions span the entire 2030 Agenda — every goal matters. @cr-sdg
+Our passions span the entire 2030 Agenda. @cr-sdg
 
 :::{#cr-sdg}
 ```{python}
 #| echo: false
 fig = go.Figure()
-
 fig.add_trace(go.Treemap(
-    labels=[f"{i}  {s}" for i, s in zip(sdg_df["Icon"], sdg_df["SDG"])],
-    parents=[""] * len(sdg_df),
-    values=sdg_df["Votes"],
-    marker=dict(colors=sdg_df["Color"], cornerradius=8),
+    labels=sdg_df["SDG"], parents=[""] * len(sdg_df),
+    values=sdg_df["Votes"], marker_colors=sdg_df["Color"],
     texttemplate="<b>%{label}</b><br>%{value} votes",
-    textfont=dict(family="Space Grotesk, sans-serif", size=14),
-    hovertemplate="%{label}<br>%{value} votes<extra></extra>",
 ))
-
-fig.update_layout(
-    **{**dark_template, "margin": dict(l=10, r=10, t=60, b=10)},
-    title="Our Favorite SDGs — Sized by Votes",
-    height=520,
-)
-show(fig)
+fig.update_layout(title="Favorite SDGs --- Sized by Votes")
+fig.show()
 ```
 :::
 
 :::
 
 
-<!-- ============================================================ -->
-<!-- BEVERAGES -->
-<!-- ============================================================ -->
-
-:::{.cr-section layout="sidebar-right"}
-
 ## What Fuels Us?
 
-Time for the important stuff: **what do we drink every week?** @cr-drinks
+:::{.cr-section}
 
-**2,100 liters of water** — enough to fill **10 bathtubs** every single week! @cr-drinks
+**What do we drink every week?** @cr-drinks
 
-**525 liters of coffee** could fill a small hot tub. That's 3.5 liters per person — roughly **5 cups a day**. @cr-drinks
+**2,100 liters of water** --- enough to fill **10 bathtubs**! @cr-drinks
 
-**300L of tea**, **150L of soda**, **120L of juice**, and **45L of energy drinks** complete the menu. @cr-drinks
+**525 liters of coffee** --- 3.5 liters per person, roughly **5 cups a day**. @cr-drinks
 
-:::{focus-on="cr-drinks"}
-::: {.fun-fact}
-**Fun fact:** If we lined up all our weekly water bottles (500ml each), they'd stretch for 2.1 km — the length of 20 football fields!
-:::
-:::
+Plus **300L tea**, **150L soda**, **120L juice**, and **45L energy drinks**. @cr-drinks
+
+::::{focus-on="cr-drinks"}
+**Fun fact:** Our weekly water bottles lined up would stretch 2.1 km --- 20 football fields!
+::::
 
 :::{#cr-drinks}
 ```{python}
 #| echo: false
 fig = go.Figure()
-
 fig.add_trace(go.Bar(
-    x=bev_df["Drink"],
-    y=bev_df["Liters"],
-    marker=dict(
-        color=bev_df["Color"],
-        cornerradius=8,
-        line=dict(width=0),
-    ),
-    text=[f"<b>{l:,}L</b>" for l in bev_df["Liters"]],
+    x=bev_df["Drink"], y=bev_df["Liters"],
+    marker_color=bev_df["Color"],
+    text=[f"{l:,}L" for l in bev_df["Liters"]],
     textposition="outside",
-    textfont=dict(size=12, family="Space Grotesk", color="#e2e8f0"),
-    hovertemplate="%{x}<br>Total: %{y:,}L per week<extra></extra>",
 ))
-
-fig.update_layout(
-    **dark_template,
-    title="Weekly Beverages (150 people)",
-    yaxis=dict(title="", gridcolor="rgba(148,163,184,0.1)", range=[0, 2600]),
-    xaxis=dict(title="", automargin=True),
-    height=420,
-    showlegend=False,
-    annotations=[dict(
-        text="Total: 3,240 L/week",
-        xref="paper", yref="paper", x=0.5, y=-0.06,
-        showarrow=False, font=dict(size=11, color="#64748b")
-    )]
-)
-show(fig)
+fig.update_layout(title="Weekly Beverages (150 people)", showlegend=False)
+fig.show()
 ```
 :::
 
 :::
 
 
-<!-- ============================================================ -->
-<!-- TRANSPORT -->
-<!-- ============================================================ -->
-
-:::{.cr-section layout="sidebar-left"}
-
 ## How Do We Move?
 
-Every week our group covers **15,000 km** combined — more than a third of the way around the Earth! @cr-transport
+:::{.cr-section}
 
-**Cars** still lead at **6,750 km/week** (45%). The biggest slice of our carbon footprint. @cr-transport
+Every week we cover **15,000 km** combined --- a third of the way around Earth! @cr-transport
 
-**Buses & transit** at **4,500 km** (30%) — public transport for the win! @cr-transport
+**Cars** lead at **6,750 km/week** (45%). @cr-transport
 
-The green heroes: **2,250 km walked** and **1,500 km biked** every week — 25 km of zero-emission travel per person. @cr-transport
+**Buses** at **4,500 km** (30%). @cr-transport
 
-:::{focus-on="cr-transport"}
-::: {.fun-fact}
-**Challenge:** If every car trip under 5 km switched to biking, we'd save roughly **820 kg of CO₂ per week** as a group!
-:::
-:::
+**2,250 km walked** and **1,500 km biked** --- 25 km zero-emission per person. @cr-transport
+
+::::{focus-on="cr-transport"}
+**Challenge:** Switch car trips under 5 km to biking and save **820 kg CO2/week**!
+::::
 
 :::{#cr-transport}
 ```{python}
 #| echo: false
 fig = go.Figure()
-
 fig.add_trace(go.Pie(
-    labels=transport_df["Mode"],
-    values=transport_df["TotalKm"],
-    marker=dict(colors=transport_df["Color"],
-                line=dict(color="#1e293b", width=3)),
-    hole=0.52,
+    labels=transport_df["Mode"], values=transport_df["TotalKm"],
+    marker_colors=transport_df["Color"], hole=0.5, sort=False,
     texttemplate="<b>%{label}</b><br>%{value:,} km",
-    textfont=dict(family="Space Grotesk, sans-serif", size=11, color="#f1f5f9"),
-    hovertemplate="%{label}<br>%{value:,} km/week<br>%{percent}<extra></extra>",
-    sort=False,
 ))
-
-fig.update_layout(
-    **dark_template,
-    title="Weekly Travel: 15,000 km",
-    height=440,
-    showlegend=False,
-    annotations=[dict(
-        text="<b>15,000</b><br>km/week",
-        x=0.5, y=0.5, font=dict(size=16, color="#f1f5f9", family="Space Grotesk"),
-        showarrow=False
-    )]
-)
-show(fig)
+fig.update_layout(title="Weekly Travel: 15,000 km", showlegend=False,
+                  annotations=[dict(text="<b>15,000</b><br>km/week",
+                                    x=0.5, y=0.5, showarrow=False)])
+fig.show()
 ```
 :::
 
 :::
 
 
-<!-- ============================================================ -->
-<!-- SDG WORDS -->
-<!-- ============================================================ -->
+## Three Words About the SDGs
 
 :::{.cr-section layout="overlay-center"}
 
-## Three Words About the SDGs
+**"Name three words when you think about the SDGs."** @cr-words
 
-We asked: **"Name three words that come to mind when you think about the SDGs."** @cr-words
+**Future**, **Hope**, and **Action** dominated. @cr-words
 
-The biggest words reflect our collective consciousness: **Future**, **Hope**, and **Action** dominated. @cr-words
+**Together**, **Planet**, and **Change** --- a shared journey toward transformation. @cr-words
 
-**Together**, **Planet**, and **Change** tell us something powerful — we see the SDGs as a shared journey toward transformation. @cr-words
-
-**Innovation** and **Community** sit side by side — we believe solutions come from working collectively with creative minds. @cr-words
+**Innovation** and **Community** --- solutions from collective creativity. @cr-words
 
 :::{#cr-words}
 ```{python}
 #| echo: false
-import math
+colors_cloud = ["#38bdf8","#f472b6","#a78bfa","#34d399","#fbbf24","#818cf8",
+                "#22d3ee","#fb923c","#86efac","#f472b6","#38bdf8","#fbbf24",
+                "#a78bfa","#34d399","#818cf8","#22d3ee","#f87171","#c084fc",
+                "#86efac","#fb923c","#67e8f9","#fbbf24","#f472b6","#38bdf8",
+                "#34d399","#a78bfa","#818cf8","#fbbf24","#22d3ee","#f87171"]
 
-colors = ["#38bdf8","#f472b6","#a78bfa","#34d399","#fbbf24","#818cf8",
-          "#22d3ee","#fb923c","#86efac","#f472b6","#38bdf8","#fbbf24",
-          "#a78bfa","#34d399","#818cf8","#22d3ee","#f87171","#c084fc",
-          "#86efac","#fb923c","#67e8f9","#fbbf24","#f472b6","#38bdf8",
-          "#34d399","#a78bfa","#818cf8","#fbbf24","#22d3ee","#f87171"]
-
-n = len(words_df)
-# Place words on a spiral
 fig = go.Figure()
+max_m = max(m for _, m in words_data)
+min_m = min(m for _, m in words_data)
 
-x_coords = []
-y_coords = []
-for i in range(n):
+for i, (word, mentions) in enumerate(words_data):
     angle = i * 0.75
     radius = 0.5 + i * 0.35
-    x_coords.append(radius * math.cos(angle))
-    y_coords.append(radius * math.sin(angle) * 0.7)
-
-max_mentions = words_df["Mentions"].max()
-min_mentions = words_df["Mentions"].min()
-
-for i, row in words_df.iterrows():
-    # Scale font size between 10 and 34 based on mentions
-    frac = (row["Mentions"] - min_mentions) / (max_mentions - min_mentions)
-    font_size = 10 + frac * 24
-
+    frac = (mentions - min_m) / (max_m - min_m)
     fig.add_trace(go.Scatter(
-        x=[x_coords[i]],
-        y=[y_coords[i]],
-        mode="text",
-        text=[row["Word"]],
-        textfont=dict(
-            size=font_size,
-            color=colors[i % len(colors)],
-            family="Space Grotesk, sans-serif"
-        ),
-        hovertemplate=f"{row['Word']}: {row['Mentions']} mentions<extra></extra>",
+        x=[radius * math.cos(angle)],
+        y=[radius * math.sin(angle) * 0.7],
+        mode="text", text=[word],
+        textfont=dict(size=10 + frac * 24, color=colors_cloud[i % len(colors_cloud)]),
+        hovertemplate=f"{word}: {mentions} mentions<extra></extra>",
         showlegend=False,
     ))
 
-fig.update_layout(
-    **dark_template,
-    title="Words Sized by Frequency",
-    xaxis=dict(visible=False),
-    yaxis=dict(visible=False, scaleanchor="x"),
-    height=450,
-)
-show(fig)
+fig.update_layout(title="Words Sized by Frequency",
+                  xaxis=dict(visible=False), yaxis=dict(visible=False, scaleanchor="x"))
+fig.show()
 ```
 :::
 
 :::
 
 
-<!-- ============================================================ -->
-<!-- FUNNY Q1: RENEWABLE ENERGY -->
-<!-- ============================================================ -->
-
-:::{.cr-section layout="sidebar-left"}
-
 ## If You Were a Renewable Energy...
 
-Time for the real questions. **"If you could be a renewable energy source, which one would you be?"** @cr-energy
+:::{.cr-section}
 
-**Solar (52 votes)** — the crowd favorite! Bright, warm, and available everywhere. Plus, free vitamin D. @cr-energy
+**"If you could be a renewable energy source?"** @cr-energy
 
-**Wind (38)** — free-spirited and impossible to contain. These are the people who leave meetings early "because they felt a breeze." @cr-energy
+**Solar (52)** --- bright, warm, everywhere. @cr-energy
 
-**Geothermal (18)** — calm on the surface, full of fire underneath. **Biomass (14)** — literally fueled by leftovers. @cr-energy
+**Wind (38)** --- free-spirited, impossible to contain. @cr-energy
+
+**Geothermal (18)** --- calm on the surface, fire underneath. **Biomass (14)** --- fueled by leftovers. @cr-energy
 
 :::{#cr-energy}
 ```{python}
 #| echo: false
 fig = go.Figure()
-
 fig.add_trace(go.Scatter(
-    x=energy_df["Source"],
-    y=energy_df["Votes"],
+    x=energy_df["Source"], y=energy_df["Votes"],
     mode="markers+text",
-    marker=dict(
-        size=energy_df["Votes"] * 1.8,
-        color=energy_df["Color"],
-        opacity=0.75,
-        line=dict(color="#1e293b", width=2)
-    ),
+    marker=dict(size=energy_df["Votes"] * 1.8, color=energy_df["Color"],
+                opacity=0.75, line=dict(color="#ccc", width=1)),
     text=[f"<b>{v}</b>" for v in energy_df["Votes"]],
     textposition="middle center",
-    textfont=dict(size=18, family="Space Grotesk", color="#1e293b"),
-    hovertemplate="%{x}: %{y} votes<extra></extra>",
 ))
-
-fig.update_layout(
-    **dark_template,
-    title="Your Renewable Alter Ego",
-    xaxis=dict(title="", automargin=True),
-    yaxis=dict(title="Votes", gridcolor="rgba(148,163,184,0.1)", range=[0, 68]),
-    height=400,
-    showlegend=False,
-)
-show(fig)
+fig.update_layout(title="Your Renewable Alter Ego", showlegend=False)
+fig.show()
 ```
 :::
 
 :::
 
 
-<!-- ============================================================ -->
-<!-- FUNNY Q2: SPIRIT ANIMAL -->
-<!-- ============================================================ -->
-
-:::{.cr-section layout="sidebar-right"}
-
 ## Spirit Animal in Meetings
+
+:::{.cr-section}
 
 **"What's your spirit animal in team meetings?"** @cr-animals
 
-**Sloth (35)** takes the crown. Slow, steady, and occasionally asleep with eyes open. @cr-animals
+**Sloth (35)** --- slow, steady, occasionally asleep with eyes open. @cr-animals
 
-**Owl (32)** — the wise observers. **Golden Retriever (28)** — just SO HAPPY to be here. @cr-animals
+**Owl (32)** --- wise observers. **Golden Retriever (28)** --- SO HAPPY to be here. @cr-animals
 
-**Cat (25)** — shows up, judges everyone, leaves. **Parrot (18)** — repeats everything the manager says. **Penguin (12)** — looks formal, slides around on their belly. @cr-animals
+**Cat (25)** --- judges everyone. **Parrot (18)** --- repeats the manager. **Penguin (12)** --- formal but slides around. @cr-animals
 
 :::{#cr-animals}
 ```{python}
 #| echo: false
 fig = go.Figure()
-
 fig.add_trace(go.Pie(
-    labels=animal_df["Animal"],
-    values=animal_df["Votes"],
-    marker=dict(
-        colors=animal_df["Color"],
-        line=dict(color="#1e293b", width=3)
-    ),
-    hole=0.45,
+    labels=animal_df["Animal"], values=animal_df["Votes"],
+    marker_colors=animal_df["Color"], hole=0.45, sort=False,
     texttemplate="<b>%{label}</b><br>%{value}",
-    textfont=dict(family="Space Grotesk, sans-serif", size=11, color="#f1f5f9"),
-    hovertemplate="%{label}: %{value} votes (%{percent})<extra></extra>",
-    sort=False,
 ))
-
-fig.update_layout(
-    **dark_template,
-    title="Meeting Spirit Animals",
-    height=420,
-    showlegend=False,
-    annotations=[dict(
-        text="<b>150</b><br>people",
-        x=0.5, y=0.5, font=dict(size=16, color="#f1f5f9", family="Space Grotesk"),
-        showarrow=False
-    )]
-)
-show(fig)
+fig.update_layout(title="Meeting Spirit Animals", showlegend=False,
+                  annotations=[dict(text="<b>150</b><br>people",
+                                    x=0.5, y=0.5, showarrow=False)])
+fig.show()
 ```
 :::
 
 :::
 
 
-<!-- ============================================================ -->
-<!-- FUNNY Q3: HOUSEPLANTS -->
-<!-- ============================================================ -->
-
-:::{.cr-section layout="sidebar-left"}
-
 ## The Great Plant Census
 
-The question that haunts us all: **"How many houseplants have you accidentally... composted?"** @cr-plants
+:::{.cr-section}
 
-Only **22 people (15%)** claim zero casualties. We salute you, Plant Whisperers. @cr-plants
+**"How many houseplants have you accidentally composted?"** @cr-plants
 
-**45 people** lost **1-3 plants** — the biggest group. Everyone gets a learning curve. @cr-plants
+Only **22 (15%)** claim zero casualties. @cr-plants
 
-**38** admitted to 4-7 casualties, **25 brave souls** confessed to 8+, and **20** simply said "Lost count." Combined estimated casualties: **487 plants**. Moment of silence. @cr-plants
+**45 people** lost **1-3 plants** --- the biggest group. @cr-plants
+
+**38** lost 4-7, **25** confessed to 8+, and **20** said "lost count." Total: **~487 plants**. @cr-plants
 
 :::{#cr-plants}
 ```{python}
 #| echo: false
 fig = go.Figure()
-
 fig.add_trace(go.Bar(
-    y=plant_df["Range"],
-    x=plant_df["Count"],
-    orientation="h",
-    marker=dict(color=plant_df["Color"], cornerradius=8),
-    text=[f"  {i} {c}" for i, c in zip(plant_df["Icon"], plant_df["Count"])],
-    textposition="outside",
-    textfont=dict(size=12, family="Space Grotesk", color="#e2e8f0"),
-    hovertemplate="%{y}: %{x} people<extra></extra>",
+    y=plant_df["Range"], x=plant_df["Count"], orientation="h",
+    marker_color=plant_df["Color"],
+    text=plant_df["Count"], textposition="outside",
 ))
-
-fig.update_layout(
-    **dark_template,
-    title="Houseplant Casualties",
-    xaxis=dict(title="", gridcolor="rgba(148,163,184,0.1)", range=[0, 58]),
-    yaxis=dict(title="", autorange="reversed", automargin=True),
-    height=380,
-    showlegend=False,
-    annotations=[dict(
-        text="~487 plants lost",
-        xref="paper", yref="paper", x=0.5, y=-0.06,
-        showarrow=False, font=dict(size=11, color="#64748b")
-    )]
-)
-show(fig)
+fig.update_layout(title="Houseplant Casualties",
+                  yaxis=dict(autorange="reversed"), showlegend=False)
+fig.show()
 ```
 :::
 
 :::
 
-
-<!-- ============================================================ -->
-<!-- CLOSING -->
-<!-- ============================================================ -->
 
 :::{.cr-section layout="overlay-center"}
 
 @cr-closing
 
-That's us. **150 people. 50 teams.** Diverse careers, varied skills, and a shared commitment to the SDGs. @cr-closing
+That's us. **150 people. 50 teams.** @cr-closing
 
-From the coffee we drink to the kilometers we walk, from our favorite goals to our fallen houseplants — every data point tells a piece of our story. @cr-closing
+From coffee to kilometers, from SDGs to fallen houseplants --- every data point tells our story. @cr-closing
 
 :::{focus-on="cr-closing"}
-**Now let's get to work — the future won't build itself.**
+**Now let's get to work --- the future won't build itself.**
 
 *(...but at least we have 525 liters of coffee to help.)*
 :::
 
 :::{#cr-closing}
-```{=html}
-<div class="hero-box" style="min-height:70svh; gap:1.2rem;">
-  <div style="font-size:4rem;">🌍</div>
-  <div class="hero-title" style="font-size:2.8rem;">This Is Us.</div>
-  <div class="hero-sub">150 people · 50 teams · Infinite potential.</div>
-  <div class="closing-badges">
-    <span class="badge" style="background:rgba(244,114,182,0.15); color:#f472b6;">45% Female</span>
-    <span class="badge" style="background:rgba(129,140,248,0.15); color:#818cf8;">12 Careers</span>
-    <span class="badge" style="background:rgba(34,197,94,0.15); color:#22c55e;">77% Python</span>
-    <span class="badge" style="background:rgba(251,191,36,0.15); color:#fbbf24;">17 SDGs</span>
-    <span class="badge" style="background:rgba(56,189,248,0.15); color:#38bdf8;">3,240 L/week</span>
-    <span class="badge" style="background:rgba(167,139,250,0.15); color:#a78bfa;">15,000 km/week</span>
-  </div>
-</div>
-```
+
+## This Is Us.
+
+*150 people · 50 teams · Infinite potential.*
+
 :::
 
 :::

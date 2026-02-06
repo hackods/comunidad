@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  color: #f1f5f9;
+}
+
+#quarto-document-content {
+  background-color: #0f172a;
+}
+
+.cr-section .narrative-col {
+  z-index: 10;
+}
+
+.narrative {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.75;
+}
+
+/* ---------- HERO / BIG NUMBER ---------- */
+.hero-section h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.hero-section p {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 1.3rem;
+  font-weight: 300;
+}
+
+.hero-section .scroll-hint {
+  text-align: center;
+  color: #475569;
+  font-size: 0.85rem;
+  margin-top: 2rem;
+}
+
+.bignum-section p:first-child {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.bignum-section p:nth-child(2) {
+  font-size: 1.4rem;
+  color: #94a3b8;
+  font-weight: 300;
+  text-align: center;
+}
+
+/* ---------- CLOSING ---------- */
+.closing-section {
+  text-align: center;
+}
+
+.closing-section p:first-child {
+  font-size: 4rem;
+  margin-bottom: 0;
+}
+
+.closing-section h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+
+.closing-section .badges p {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.closing-section .badges span {
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ---------- FUN FACT ---------- */
+.fun-fact {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(129, 140, 248, 0.12));
+  border-left: 4px solid #818cf8;
+  padding: 1rem 1.5rem;
+  border-radius: 0 12px 12px 0;
+  font-style: italic;
+  color: #cbd5e1;
+}
+
+/* ---------- PLOTLY RESPONSIVE ---------- */
+.js-plotly-plot,
+.plotly,
+.plot-container,
+.plotly-graph-div {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.js-plotly-plot .plotly .main-svg,
+.js-plotly-plot .plotly .svg-container {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.cell-output-display {
+  width: 100% !important;
+  overflow: hidden;
+}
+
+.cell-output-display > div {
+  width: 100% !important;
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section p {
+    font-size: 1rem;
+  }
+
+  .bignum-section p:first-child {
+    font-size: 5rem;
+  }
+
+  .bignum-section p:nth-child(2) {
+    font-size: 1rem;
+  }
+
+  .fun-fact {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .closing-section h2 {
+    font-size: 2rem;
+  }
+
+  .closing-section .badges span {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .cell-output-display {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section h1 {
+    font-size: 1.6rem;
+  }
+
+  .bignum-section p:first-child {
+    font-size: 3.5rem;
+  }
+
+  .bignum-section p:nth-child(2) {
+    font-size: 0.85rem;
+  }
+}
