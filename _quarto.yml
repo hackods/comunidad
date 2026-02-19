@@ -1,20 +1,5 @@
 project:
   type: website
   output-dir: docs
-  post-render:
-    - "cp .nojekyll docs/.nojekyll"
 
 jupyter: python3
-
-format:
-  closeread-html:
-    remove-header-space: true
-    css: style.css
-    cr-style:
-      narrative-background-color-overlay: "rgba(15, 23, 42, 0.9)"
-      narrative-text-color-overlay: "#f1f5f9"
-      narrative-background-color-sidebar: "rgba(15, 23, 42, 0.92)"
-      narrative-text-color-sidebar: "#f1f5f9"
-      narrative-border-radius: "10px"
-      narrative-font-size: "1.1rem"
-      section-background-color: "#0f172a"

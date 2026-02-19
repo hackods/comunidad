@@ -1,6 +1,17 @@
 ---
-title: "Who Are We?"
-subtitle: "A scrollytelling journey through 150 changemakers"
+title: "Comunidad HackODS"
+format:
+  dashboard:
+    theme:
+      - cosmo
+      - custom.scss
+    css: style.css
+    orientation: rows
+    scrolling: true
+    logo: logo.png
+    nav-buttons:
+      - icon: github
+        href: https://github.com/hackods
 jupyter: python3
 ---
 
@@ -8,539 +19,796 @@ jupyter: python3
 #| echo: false
 #| output: false
 
+# ============================================================
+# SETUP: Paleta, datos simulados y función de estilo
+# ============================================================
 import plotly.graph_objects as go
-import plotly.io as pio
+import plotly.express as px
+from plotly.subplots import make_subplots
 import pandas as pd
-import math
+import numpy as np
 
-# Force Plotly to use the classic renderer (not ES modules)
-pio.renderers.default = "notebook_connected"
-
-# ---------- shared dark layout ----------
-BG = "#0f172a"
-CARD = "rgba(30, 41, 59, 0.75)"
-TEXT = "#e2e8f0"
-MUTED = "#94a3b8"
-GRID = "rgba(148, 163, 184, 0.12)"
+# --- Paleta HackODS (colores ODS) ---
+BLACK = "#1a1a1a"
+WHITE = "#ffffff"
+LIGHT_GRAY = "#f9fafb"
+MEDIUM_GRAY = "#6b7280"
+DARK_GRAY = "#1f2937"
 FONT = "Inter, system-ui, sans-serif"
 TITLE_FONT = "Space Grotesk, system-ui, sans-serif"
 
-ACCENT = "#38bdf8"
+# Colores principales tomados de los ODS
+ODS_BLUE = "#0a97d9"      # Azul ODS (rueda)
+ODS_GREEN = "#4CA146"      # ODS 3 - verde
+ODS_RED = "#E5233D"        # ODS 1 - rojo
+ODS_ORANGE = "#F26A2D"     # ODS 9 - naranja
+ODS_YELLOW = "#FBC412"     # ODS 7 - amarillo
+ODS_PINK = "#E01483"       # ODS 10 - rosa
+ODS_TEAL = "#27BFE6"       # ODS 6 - cyan
+ODS_DARK_BLUE = "#126A9F"  # ODS 16 - azul oscuro
 
-def styled(fig, title=""):
-    fig.update_layout(
+# Paleta categorica multicolor ODS
+HACKODS_CAT = [ODS_BLUE, ODS_RED, ODS_GREEN, ODS_ORANGE, ODS_PINK, ODS_YELLOW, ODS_TEAL, ODS_DARK_BLUE, "#A31C44", "#59BA48"]
+# Paleta secuencial azul ODS
+HACKODS_SEQ = ["#e0f4fd", "#b3e5fc", "#7dd3f7", "#4fc3f7", "#0a97d9", "#0277bd", "#01579b"]
+
+LEVEL_COLORS = {
+    "Nunca lo use": "#e5e7eb",
+    "Principiante": "#7dd3f7",
+    "Intermedio": "#0a97d9",
+    "Avanzado": "#01579b",
+}
+
+SDG_COLORS = {
+    1: "#E5233D", 2: "#DDA73A", 3: "#4CA146", 4: "#C5192D",
+    5: "#EF402C", 6: "#27BFE6", 7: "#FBC412", 8: "#A31C44",
+    9: "#F26A2D", 10: "#E01483", 11: "#F89D2A", 12: "#BF8D2C",
+    13: "#407F46", 14: "#1F97D4", 15: "#59BA48", 16: "#126A9F",
+    17: "#13496B",
+}
+
+SDG_NAMES = {
+    1: "Fin de la pobreza", 2: "Hambre cero", 3: "Salud y bienestar",
+    4: "Educacion de calidad", 5: "Igualdad de genero", 6: "Agua limpia",
+    7: "Energia asequible", 8: "Trabajo decente", 9: "Industria e innovacion",
+    10: "Reduccion de desigualdades", 11: "Ciudades sostenibles",
+    12: "Produccion responsable", 13: "Accion por el clima",
+    14: "Vida submarina", 15: "Vida de ecosistemas terrestres",
+    16: "Paz, justicia e instituciones", 17: "Alianzas para los objetivos",
+}
+
+
+def hackods_fig(fig, title="", height=None):
+    """Aplica el estilo HackODS a cualquier figura Plotly."""
+    layout_args = dict(
         title=dict(
             text=f"<b>{title}</b>" if title else "",
-            font=dict(family=TITLE_FONT, size=22, color="#f8fafc"),
-            x=0.5, xanchor="center", y=0.97, yanchor="top",
+            font=dict(family=TITLE_FONT, size=16, color=BLACK),
+            x=0.5, xanchor="center",
         ),
-        paper_bgcolor=BG,
-        plot_bgcolor=BG,
-        font=dict(family=FONT, size=14, color=TEXT),
-        margin=dict(l=10, r=10, t=60, b=10),
-        autosize=True,
-        showlegend=False,
-        xaxis=dict(
-            gridcolor=GRID, zerolinecolor=GRID,
-            tickfont=dict(family=FONT, size=13, color=MUTED),
-            title_font=dict(family=FONT, size=14, color=MUTED),
-        ),
-        yaxis=dict(
-            gridcolor=GRID, zerolinecolor=GRID,
-            tickfont=dict(family=FONT, size=13, color=MUTED),
-            title_font=dict(family=FONT, size=14, color=MUTED),
-        ),
+        paper_bgcolor=WHITE,
+        plot_bgcolor=WHITE,
+        font=dict(family=FONT, size=12, color=DARK_GRAY),
+        margin=dict(l=20, r=20, t=50, b=20),
         hoverlabel=dict(
-            bgcolor=CARD, font_size=14, font_family=FONT,
-            font_color=TEXT, bordercolor=GRID,
+            bgcolor=BLACK, font_size=12, font_family=FONT,
+            font_color=WHITE, bordercolor=ODS_BLUE,
         ),
     )
-    # Style text on all traces
-    for trace in fig.data:
-        if hasattr(trace, "textfont") and not isinstance(trace, go.Scatter):
-            trace.textfont = dict(family=FONT, size=14, color="#f8fafc")
-        if hasattr(trace, "insidetextfont"):
-            trace.insidetextfont = dict(family=FONT, size=13, color="#f8fafc")
-        if hasattr(trace, "outsidetextfont"):
-            trace.outsidetextfont = dict(family=FONT, size=14, color=TEXT)
+    if height:
+        layout_args["height"] = height
+    fig.update_layout(**layout_args)
     return fig
 
+
 # ============================================================
-# DATA
+# DATOS SIMULADOS — 150 participantes, 50 equipos
 # ============================================================
+np.random.seed(42)
+N = 150
+TEAMS = 50
 
-gender_df = pd.DataFrame({
-    "Gender": ["Female", "Male", "Non-binary"],
-    "Count": [68, 62, 20],
-    "Color": ["#f472b6", "#38bdf8", "#a78bfa"]
-})
-gender_df["Pct"] = (gender_df["Count"] / 150 * 100).round(1)
+# --- Identidad de genero ---
+genero_opciones = ["Mujer", "Hombre", "No binarie", "Prefiero no decir"]
+genero_pesos = [0.44, 0.40, 0.10, 0.06]
+generos = np.random.choice(genero_opciones, size=N, p=genero_pesos)
 
-career_df = pd.DataFrame({
-    "Career": ["Software Engineering", "Data Science", "Environmental Science",
-               "Design / UX", "Marketing & Comms", "Business & Management",
-               "Education", "Public Policy", "Healthcare",
-               "Art & Creative", "Agriculture", "Journalism"],
-    "Count": [28, 24, 18, 16, 14, 12, 10, 8, 6, 5, 5, 4]
-})
-career_colors = ["#818cf8","#818cf8","#34d399","#f472b6","#fbbf24",
-                 "#38bdf8","#fb923c","#a78bfa","#f87171","#c084fc","#86efac","#67e8f9"]
+# --- Edad ---
+edades = np.random.normal(loc=23, scale=3.5, size=N).clip(18, 40).astype(int)
 
-python_df = pd.DataFrame({
-    "Level": ["Expert", "Advanced", "Intermediate", "Beginner"],
-    "Count": [20, 40, 55, 35],
-    "Color": ["#15803d", "#22c55e", "#4ade80", "#86efac"],
-})
-python_df["Pct"] = (python_df["Count"] / 150 * 100).round(0).astype(int)
-
-sdg_df = pd.DataFrame({
-    "SDG": ["13: Climate Action", "4: Quality Education", "6: Clean Water",
-            "7: Affordable Energy", "3: Good Health", "5: Gender Equality",
-            "11: Sustainable Cities", "2: Zero Hunger", "14: Life Below Water",
-            "15: Life on Land", "1: No Poverty", "12: Responsible Consumption"],
-    "Votes": [32, 22, 18, 15, 14, 12, 10, 8, 7, 6, 3, 3],
-    "Color": ["#3F7E44","#C5192D","#26BDE2","#FCC30B","#4C9F38","#FF3A21",
-              "#FD9D24","#DDA63A","#0A97D9","#56C02B","#E5243B","#BF8B2E"],
-})
-
-bev_df = pd.DataFrame({
-    "Drink": ["Water", "Coffee", "Tea", "Soda", "Juice", "Energy"],
-    "Liters": [2100, 525, 300, 150, 120, 45],
-    "PerPerson": [14.0, 3.5, 2.0, 1.0, 0.8, 0.3],
-    "Color": ["#38bdf8", "#92400e", "#65a30d", "#dc2626", "#f59e0b", "#10b981"]
-})
-
-transport_df = pd.DataFrame({
-    "Mode": ["Car", "Bus & Transit", "Walking", "Bicycle"],
-    "TotalKm": [6750, 4500, 2250, 1500],
-    "PerPerson": [45, 30, 15, 10],
-    "Color": ["#ef4444", "#f59e0b", "#22c55e", "#3b82f6"]
-})
-
-words_data = [
-    ("Future",48),("Hope",44),("Action",42),("Together",40),("Planet",38),
-    ("Change",36),("Justice",34),("Climate",33),("Green",31),("Equality",30),
-    ("Water",28),("Education",27),("Innovation",26),("Community",25),
-    ("Sustainability",24),("Clean",22),("Health",21),("Peace",20),("Nature",19),
-    ("Responsibility",18),("Resilience",17),("Energy",16),("Dignity",15),
-    ("Oceans",14),("Forests",14),("Empowerment",13),("Biodiversity",12),
-    ("Circular",11),("Equity",11),("Solidarity",10),
+# --- Estado ---
+estados_opciones = [
+    "CDMX", "Estado de Mexico", "Jalisco", "Nuevo Leon", "Puebla",
+    "Queretaro", "Veracruz", "Guanajuato", "Michoacan", "Oaxaca",
+    "Yucatan", "Chiapas", "Sonora", "Morelos", "Hidalgo", "Otro"
 ]
+estados_pesos = [
+    0.25, 0.12, 0.10, 0.08, 0.07, 0.06, 0.05, 0.04,
+    0.04, 0.04, 0.03, 0.03, 0.02, 0.02, 0.02, 0.03
+]
+estados = np.random.choice(estados_opciones, size=N, p=estados_pesos)
 
-energy_df = pd.DataFrame({
-    "Source": ["Solar", "Wind", "Hydro", "Geothermal", "Biomass"],
-    "Votes": [52, 38, 28, 18, 14],
-    "Color": ["#fbbf24", "#93c5fd", "#38bdf8", "#f87171", "#86efac"]
+# --- Area de conocimiento ---
+area_opciones = ["Ingenierias", "Ciencias", "Ciencias Sociales", "Humanidades", "Artes", "Salud"]
+area_pesos = [0.30, 0.25, 0.18, 0.12, 0.08, 0.07]
+areas = np.random.choice(area_opciones, size=N, p=area_pesos)
+
+# --- Nivel de herramientas ---
+niveles = ["Nunca lo use", "Principiante", "Intermedio", "Avanzado"]
+
+python_nivel = np.random.choice(niveles, size=N, p=[0.08, 0.25, 0.42, 0.25])
+quarto_nivel = np.random.choice(niveles, size=N, p=[0.35, 0.30, 0.25, 0.10])
+github_nivel = np.random.choice(niveles, size=N, p=[0.20, 0.32, 0.30, 0.18])
+
+# --- ODS favorito ---
+ods_favoritos = np.random.choice(list(range(1, 18)), size=N, p=[
+    0.03, 0.04, 0.06, 0.08, 0.05, 0.07, 0.06, 0.03,
+    0.04, 0.03, 0.05, 0.05, 0.15, 0.08, 0.07, 0.04, 0.07
+])
+
+# --- Habitos sostenibles ---
+habitos_lista = [
+    "Recicla", "Usa transporte publico", "Reduce plastico",
+    "Composta", "Ahorra energia", "Consume local", "Usa bici",
+    "Dieta plant-based", "Ahorra agua"
+]
+habitos_por_persona = [np.random.choice(habitos_lista, size=np.random.randint(1, 5), replace=False).tolist() for _ in range(N)]
+
+# --- Conciencia de huella de carbono ---
+carbono_opciones = [
+    "Si, calculo mi huella", "Tengo una idea general",
+    "He escuchado del tema", "No se que es"
+]
+carbono = np.random.choice(carbono_opciones, size=N, p=[0.12, 0.35, 0.38, 0.15])
+
+# --- Acciones climaticas ---
+acciones_opciones = [
+    "Marcha/protesta", "Firma peticiones", "Educa a otres",
+    "Proyecto comunitario", "Contenido en redes", "Voluntariado",
+    "Donaciones", "Ninguna aun"
+]
+acciones = np.random.choice(acciones_opciones, size=N, p=[0.08, 0.15, 0.18, 0.12, 0.20, 0.10, 0.05, 0.12])
+
+# --- Datos fun ---
+genero_musical_opciones = [
+    "Pop", "Rock", "Reggaeton", "Lo-fi/Chill", "Electronica",
+    "Hip-hop", "Clasica", "Cumbia", "K-pop", "Otro"
+]
+genero_musical = np.random.choice(genero_musical_opciones, size=N, p=[
+    0.15, 0.12, 0.14, 0.13, 0.10, 0.08, 0.05, 0.08, 0.10, 0.05
+])
+
+animal_opciones = ["Ajolote", "Perezoso", "Buho", "Gato", "Capibara", "Loro", "Pinguino", "Perro golden"]
+animal_emojis = {
+    "Ajolote": "Ajolote 🦎", "Perezoso": "Perezoso 🦥", "Buho": "Buho 🦉",
+    "Gato": "Gato 🐱", "Capibara": "Capibara 🦫", "Loro": "Loro 🦜",
+    "Pinguino": "Pinguino 🐧", "Perro golden": "Perro golden 🐕"
+}
+animales = np.random.choice(animal_opciones, size=N, p=[0.18, 0.15, 0.14, 0.12, 0.12, 0.10, 0.10, 0.09])
+
+snack_opciones = ["Pizza", "Cafe", "Galletas", "Fruta", "Papas/Chips", "Tacos", "Chocolate", "Gomitas", "Nada", "Otro"]
+snacks = np.random.choice(snack_opciones, size=N, p=[0.18, 0.15, 0.10, 0.08, 0.12, 0.10, 0.12, 0.07, 0.04, 0.04])
+
+horas_sueno = np.random.normal(loc=4.5, scale=1.5, size=N).clip(0, 9).round(1)
+
+superpoder_opciones = [
+    "No dormir nunca", "Debuggear con la mente", "Wifi infinito",
+    "Entender cualquier dataset", "Hablar todos los idiomas", "Teletransportarse"
+]
+superpoderes = np.random.choice(superpoder_opciones, size=N, p=[0.25, 0.20, 0.18, 0.15, 0.12, 0.10])
+
+# --- DataFrame maestro ---
+equipos = [f"Equipo {i // 3 + 1}" for i in range(N)]
+df = pd.DataFrame({
+    "id": range(1, N + 1),
+    "equipo": equipos,
+    "genero": generos,
+    "edad": edades,
+    "estado": estados,
+    "area": areas,
+    "python_nivel": python_nivel,
+    "quarto_nivel": quarto_nivel,
+    "github_nivel": github_nivel,
+    "ods_favorito": ods_favoritos,
+    "conciencia_carbono": carbono,
+    "accion_climatica": acciones,
+    "genero_musical": genero_musical,
+    "animal_espiritu": animales,
+    "snack": snacks,
+    "horas_sueno": horas_sueno,
+    "superpoder": superpoderes,
 })
 
-animal_df = pd.DataFrame({
-    "Animal": ["Sloth", "Owl", "Golden Retriever", "Cat", "Parrot", "Penguin"],
-    "Votes": [35, 32, 28, 25, 18, 12],
-    "Color": ["#a78bfa", "#818cf8", "#fbbf24", "#f97316", "#22d3ee", "#e2e8f0"]
-})
-
-plant_df = pd.DataFrame({
-    "Range": ["0 (Plant Whisperer)", "1-3 plants", "4-7 plants", "8+ plants", "Lost count"],
-    "Count": [22, 45, 38, 25, 20],
-    "Color": ["#22c55e", "#86efac", "#fbbf24", "#f97316", "#ef4444"],
-})
+# Conteos utiles
+n_estados = df["estado"].nunique()
+n_areas = df["area"].nunique()
 ```
 
+# Panorama General {scrolling="false"}
 
-:::{.cr-section layout="overlay-center"}
+## Row {.tabset .fill}
 
-@cr-hero
+### Totales
 
-:::{#cr-hero}
-
-# Who Are We?
-
-*A data journey through 150 changemakers*
-
-:::
-
-:::
-
-
-:::{.cr-section layout="overlay-center"}
-
-We are **150 people** organized in **50 teams** of 3, united by one mission: building a more sustainable world. @cr-bignum
-
-But numbers alone don't tell our story. Let's scroll through who we really are. @cr-bignum
-
-:::{#cr-bignum}
-
-# 150
-
-*people · 50 teams · 1 mission*
-
-:::
-
-:::
-
-
-## Our Voices
-
-:::{.cr-section}
-
-What does our group look like? @cr-gender
-
-**68 women (45.3%)** form the largest group. @cr-gender
-
-**62 men (41.3%)** are close behind. @cr-gender
-
-And **20 non-binary people (13.3%)** enrich our perspectives. @cr-gender
-
-:::{#cr-gender}
 ```{python}
-#| echo: false
-fig = go.Figure()
-fig.add_trace(go.Bar(
-    y=gender_df["Gender"], x=gender_df["Count"], orientation="h",
-    marker_color=gender_df["Color"],
-    text=[f"{c} ({p}%)" for c, p in zip(gender_df["Count"], gender_df["Pct"])],
-    textposition="outside",
-))
-styled(fig, "Gender Composition")
-fig.update_layout(yaxis=dict(autorange="reversed"))
-fig.show()
+#| content: valuebox
+#| title: "Participantes"
+dict(icon="people-fill", color="#0a97d9", value=N)
 ```
-:::
 
-:::
-
-
-## What Do We Do?
-
-:::{.cr-section}
-
-We come from **12 different career fields**. Sustainability needs every discipline. @cr-careers
-
-**Software Engineers (28)** and **Data Scientists (24)** lead the pack. @cr-careers
-
-**Environmental Scientists (18)**, **Designers (16)**, and **Marketers (14)** keep us grounded. @cr-careers
-
-From **Public Policy** to **Agriculture** to **Journalism** --- every voice matters. @cr-careers
-
-:::{#cr-careers}
 ```{python}
-#| echo: false
-sorted_career = career_df.sort_values("Count", ascending=True)
-sorted_colors = list(reversed(career_colors))
-
-fig = go.Figure()
-fig.add_trace(go.Bar(
-    y=sorted_career["Career"], x=sorted_career["Count"], orientation="h",
-    marker_color=sorted_colors,
-    text=sorted_career["Count"], textposition="outside",
-))
-styled(fig, "12 Career Fields")
-fig.show()
+#| content: valuebox
+#| title: "Equipos"
+dict(icon="collection-fill", color="#4CA146", value=TEAMS)
 ```
-:::
 
-:::
-
-
-## Python Knowledge
-
-:::{.cr-section}
-
-In the age of data, how well do we speak **Python**? @cr-python
-
-**35 Beginners (23%)** --- `print("hello world")` never felt so good. @cr-python
-
-**55 Intermediates (37%)** --- the largest group! @cr-python
-
-**40 Advanced (27%)** and **20 Experts (13%)** --- together **77% are Intermediate or above**. @cr-python
-
-:::{#cr-python}
 ```{python}
-#| echo: false
-fig = go.Figure()
-fig.add_trace(go.Bar(
-    y=python_df["Level"], x=python_df["Count"], orientation="h",
-    marker_color=python_df["Color"],
-    text=[f"{c} ({p}%)" for c, p in zip(python_df["Count"], python_df["Pct"])],
-    textposition="outside",
-))
-styled(fig, "Python Proficiency")
-fig.show()
+#| content: valuebox
+#| title: "Estados"
+dict(icon="geo-alt-fill", color="#E5233D", value=f"{n_estados}")
 ```
-:::
 
-:::
-
-
-## Favorite SDGs
-
-:::{.cr-section layout="overlay-center"}
-
-We asked: **"Which SDG is closest to your heart?"** @cr-sdg
-
-**SDG 13 --- Climate Action** won with 32 votes. @cr-sdg
-
-**Quality Education (22)** and **Clean Water (18)** round out the top 3. @cr-sdg
-
-Our passions span the entire 2030 Agenda. @cr-sdg
-
-:::{#cr-sdg}
 ```{python}
-#| echo: false
-fig = go.Figure()
-fig.add_trace(go.Treemap(
-    labels=sdg_df["SDG"], parents=[""] * len(sdg_df),
-    values=sdg_df["Votes"], marker_colors=sdg_df["Color"],
-    texttemplate="<b>%{label}</b><br>%{value} votes",
-    textfont=dict(family=FONT, size=14),
-    pathbar=dict(textfont=dict(family=FONT, size=12)),
-))
-styled(fig, "Favorite SDGs — Sized by Votes")
-fig.show()
+#| content: valuebox
+#| title: "Areas de conocimiento"
+dict(icon="mortarboard-fill", color="#F26A2D", value=n_areas)
 ```
-:::
 
-:::
+### Identidad de genero
 
-
-## What Fuels Us?
-
-:::{.cr-section}
-
-**What do we drink every week?** @cr-drinks
-
-**2,100 liters of water** --- enough to fill **10 bathtubs**! @cr-drinks
-
-**525 liters of coffee** --- 3.5 liters per person, roughly **5 cups a day**. @cr-drinks
-
-Plus **300L tea**, **150L soda**, **120L juice**, and **45L energy drinks**. @cr-drinks
-
-::::{focus-on="cr-drinks"}
-**Fun fact:** Our weekly water bottles lined up would stretch 2.1 km --- 20 football fields!
-::::
-
-:::{#cr-drinks}
 ```{python}
-#| echo: false
-fig = go.Figure()
-fig.add_trace(go.Bar(
-    x=bev_df["Drink"], y=bev_df["Liters"],
-    marker_color=bev_df["Color"],
-    text=[f"{l:,}L" for l in bev_df["Liters"]],
-    textposition="outside",
-))
-styled(fig, "Weekly Beverages (150 people)")
-fig.show()
-```
-:::
+#| title: "Identidad de genero"
+gen_colors_map = {"Mujer": ODS_BLUE, "Hombre": ODS_GREEN, "No binarie": ODS_ORANGE, "Prefiero no decir": MEDIUM_GRAY}
+gen_order = ["Mujer", "Hombre", "No binarie", "Prefiero no decir"]
+gen_counts = df["genero"].value_counts()
 
-:::
-
-
-## How Do We Move?
-
-:::{.cr-section}
-
-Every week we cover **15,000 km** combined --- a third of the way around Earth! @cr-transport
-
-**Cars** lead at **6,750 km/week** (45%). @cr-transport
-
-**Buses** at **4,500 km** (30%). @cr-transport
-
-**2,250 km walked** and **1,500 km biked** --- 25 km zero-emission per person. @cr-transport
-
-::::{focus-on="cr-transport"}
-**Challenge:** Switch car trips under 5 km to biking and save **820 kg CO2/week**!
-::::
-
-:::{#cr-transport}
-```{python}
-#| echo: false
-fig = go.Figure()
-fig.add_trace(go.Pie(
-    labels=transport_df["Mode"], values=transport_df["TotalKm"],
-    marker_colors=transport_df["Color"], hole=0.5, sort=False,
-    texttemplate="<b>%{label}</b><br>%{value:,} km",
-    textfont=dict(family=FONT, size=14, color="#f8fafc"),
-    insidetextfont=dict(family=FONT, size=13, color="#f8fafc"),
-    outsidetextfont=dict(family=FONT, size=13, color=TEXT),
-))
-styled(fig, "Weekly Travel: 15,000 km")
-fig.update_layout(annotations=[dict(text="<b>15,000</b><br>km/week",
-                                    x=0.5, y=0.5, showarrow=False,
-                                    font=dict(family=TITLE_FONT, color=ACCENT, size=18))])
-fig.show()
-```
-:::
-
-:::
-
-
-## Three Words About the SDGs
-
-:::{.cr-section layout="overlay-center"}
-
-**"Name three words when you think about the SDGs."** @cr-words
-
-**Future**, **Hope**, and **Action** dominated. @cr-words
-
-**Together**, **Planet**, and **Change** --- a shared journey toward transformation. @cr-words
-
-**Innovation** and **Community** --- solutions from collective creativity. @cr-words
-
-:::{#cr-words}
-```{python}
-#| echo: false
-colors_cloud = ["#38bdf8","#f472b6","#a78bfa","#34d399","#fbbf24","#818cf8",
-                "#22d3ee","#fb923c","#86efac","#f472b6","#38bdf8","#fbbf24",
-                "#a78bfa","#34d399","#818cf8","#22d3ee","#f87171","#c084fc",
-                "#86efac","#fb923c","#67e8f9","#fbbf24","#f472b6","#38bdf8",
-                "#34d399","#a78bfa","#818cf8","#fbbf24","#22d3ee","#f87171"]
-
-fig = go.Figure()
-max_m = max(m for _, m in words_data)
-min_m = min(m for _, m in words_data)
-
-for i, (word, mentions) in enumerate(words_data):
-    angle = i * 0.75
-    radius = 0.5 + i * 0.35
-    frac = (mentions - min_m) / (max_m - min_m)
-    fig.add_trace(go.Scatter(
-        x=[radius * math.cos(angle)],
-        y=[radius * math.sin(angle) * 0.7],
-        mode="text", text=[word],
-        textfont=dict(family=TITLE_FONT, size=10 + frac * 28, color=colors_cloud[i % len(colors_cloud)]),
-        hovertemplate=f"{word}: {mentions} mentions<extra></extra>",
-        showlegend=False,
+traces = []
+for gen in gen_order:
+    count = gen_counts.get(gen, 0)
+    pct = count / N * 100
+    traces.append(go.Bar(
+        y=["Identidad de genero"],
+        x=[pct],
+        name=gen,
+        orientation="h",
+        marker_color=gen_colors_map[gen],
+        text=[f"{gen}: {count} ({pct:.0f}%)"],
+        textposition="inside",
+        textfont=dict(color=WHITE, size=13),
+        hovertemplate=f"{gen}: {count} personas ({pct:.0f}%)<extra></extra>",
     ))
-
-styled(fig, "Words Sized by Frequency")
-fig.update_layout(xaxis=dict(visible=False), yaxis=dict(visible=False, scaleanchor="x"))
-fig.show()
-```
-:::
-
-:::
-
-
-## If You Were a Renewable Energy...
-
-:::{.cr-section}
-
-**"If you could be a renewable energy source?"** @cr-energy
-
-**Solar (52)** --- bright, warm, everywhere. @cr-energy
-
-**Wind (38)** --- free-spirited, impossible to contain. @cr-energy
-
-**Geothermal (18)** --- calm on the surface, fire underneath. **Biomass (14)** --- fueled by leftovers. @cr-energy
-
-:::{#cr-energy}
-```{python}
-#| echo: false
-fig = go.Figure()
-fig.add_trace(go.Scatter(
-    x=energy_df["Source"], y=energy_df["Votes"],
-    mode="markers+text",
-    marker=dict(size=energy_df["Votes"] * 1.8, color=energy_df["Color"],
-                opacity=0.75, line=dict(color="rgba(148,163,184,0.3)", width=1)),
-    text=[f"<b>{v}</b>" for v in energy_df["Votes"]],
-    textposition="middle center",
-    textfont=dict(family=TITLE_FONT, size=16, color="#f8fafc"),
+fig = go.Figure(data=traces, layout=dict(
+    barmode="stack",
+    legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center"),
+    yaxis=dict(showticklabels=False, showgrid=False),
+    xaxis=dict(showgrid=False, showticklabels=False, range=[0, 100]),
 ))
-styled(fig, "Your Renewable Alter Ego")
-fig.show()
+hackods_fig(fig, "Identidad de genero")
 ```
-:::
 
-:::
+### Distribucion de edad
 
-
-## Spirit Animal in Meetings
-
-:::{.cr-section}
-
-**"What's your spirit animal in team meetings?"** @cr-animals
-
-**Sloth (35)** --- slow, steady, occasionally asleep with eyes open. @cr-animals
-
-**Owl (32)** --- wise observers. **Golden Retriever (28)** --- SO HAPPY to be here. @cr-animals
-
-**Cat (25)** --- judges everyone. **Parrot (18)** --- repeats the manager. **Penguin (12)** --- formal but slides around. @cr-animals
-
-:::{#cr-animals}
 ```{python}
-#| echo: false
-fig = go.Figure()
-fig.add_trace(go.Pie(
-    labels=animal_df["Animal"], values=animal_df["Votes"],
-    marker_colors=animal_df["Color"], hole=0.45, sort=False,
-    texttemplate="<b>%{label}</b><br>%{value}",
-    textfont=dict(family=FONT, size=14, color="#f8fafc"),
-    insidetextfont=dict(family=FONT, size=13, color="#f8fafc"),
-    outsidetextfont=dict(family=FONT, size=13, color=TEXT),
+#| title: "Distribucion de edad"
+fig = go.Figure(go.Histogram(
+    x=df["edad"],
+    nbinsx=12,
+    marker_color=ODS_BLUE,
+    opacity=0.85,
+    hovertemplate="Edad %{x}: %{y} personas<extra></extra>",
 ))
-styled(fig, "Meeting Spirit Animals")
-fig.update_layout(annotations=[dict(text="<b>150</b><br>people",
-                                    x=0.5, y=0.5, showarrow=False,
-                                    font=dict(family=TITLE_FONT, color=ACCENT, size=18))])
-fig.show()
+mean_age = df["edad"].mean()
+_ = fig.add_vline(x=mean_age, line_dash="dash", line_color=BLACK, line_width=2)
+_ = fig.add_annotation(text=f"Promedio: {mean_age:.0f} anios", x=mean_age + 1.5, y=0.95,
+                   yref="paper", showarrow=False,
+                   font=dict(size=13, color=BLACK, family=TITLE_FONT))
+_ = fig.update_layout(bargap=0.15)
+_ = fig.update_xaxes(title_text="Edad", showgrid=False)
+_ = fig.update_yaxes(title_text="Participantes", showgrid=True, gridcolor="#f3f4f6")
+hackods_fig(fig)
 ```
-:::
 
-:::
+### Areas de conocimiento
 
-
-## The Great Plant Census
-
-:::{.cr-section}
-
-**"How many houseplants have you accidentally composted?"** @cr-plants
-
-Only **22 (15%)** claim zero casualties. @cr-plants
-
-**45 people** lost **1-3 plants** --- the biggest group. @cr-plants
-
-**38** lost 4-7, **25** confessed to 8+, and **20** said "lost count." Total: **~487 plants**. @cr-plants
-
-:::{#cr-plants}
 ```{python}
-#| echo: false
-fig = go.Figure()
-fig.add_trace(go.Bar(
-    y=plant_df["Range"], x=plant_df["Count"], orientation="h",
-    marker_color=plant_df["Color"],
-    text=plant_df["Count"], textposition="outside",
+#| title: "Areas de conocimiento"
+area_counts = df["area"].value_counts().sort_values()
+colors_area = [ODS_BLUE] * len(area_counts)
+colors_area[-1] = ODS_RED
+
+fig = go.Figure(go.Bar(
+    y=area_counts.index,
+    x=area_counts.values,
+    orientation="h",
+    marker_color=colors_area,
+    text=[f"{v} ({v/N*100:.0f}%)" for v in area_counts.values],
+    textposition="outside",
+    hovertemplate="%{y}: %{x} personas<extra></extra>",
 ))
-styled(fig, "Houseplant Casualties")
-fig.update_layout(yaxis=dict(autorange="reversed"))
-fig.show()
+_ = fig.update_xaxes(showgrid=False, showticklabels=False)
+_ = fig.update_yaxes(showgrid=False)
+hackods_fig(fig, "Areas de conocimiento")
 ```
-:::
 
-:::
+# Quienes somos?
 
+## Row {height=10%}
 
-:::{.cr-section layout="overlay-center"}
+```{python}
+#| content: valuebox
+#| title: "Edad promedio"
+dict(icon="calendar-heart", color="#0a97d9", value=f"{df['edad'].mean():.0f} anios")
+```
 
-@cr-closing
+```{python}
+#| content: valuebox
+#| title: "Estado #1"
+dict(icon="geo-alt-fill", color="#4CA146", value=df["estado"].value_counts().index[0])
+```
 
-That's us. **150 people. 50 teams.** @cr-closing
+```{python}
+#| content: valuebox
+#| title: "Area #1"
+dict(icon="book-fill", color="#E5233D", value=df["area"].value_counts().index[0])
+```
 
-From coffee to kilometers, from SDGs to fallen houseplants --- every data point tells our story. @cr-closing
+```{python}
+#| content: valuebox
+#| title: "Mujeres"
+pct_mujeres = (df["genero"] == "Mujer").mean() * 100
+dict(icon="person-fill", color="#F26A2D", value=f"{pct_mujeres:.0f}%")
+```
 
-:::{focus-on="cr-closing"}
-**Now let's get to work --- the future won't build itself.**
+## Row {height=45%}
 
-*(...but at least we have 525 liters of coffee to help.)*
-:::
+```{python}
+#| title: "De que estado venimos?"
+estado_counts = df["estado"].value_counts().reset_index()
+estado_counts.columns = ["estado", "count"]
+fig = px.treemap(
+    estado_counts, path=["estado"], values="count",
+    color_discrete_sequence=HACKODS_CAT,
+)
+_ = fig.update_traces(
+    textinfo="label+value",
+    hovertemplate="<b>%{label}</b><br>%{value} personas<extra></extra>",
+)
+hackods_fig(fig, "De que estado venimos?")
+```
 
-:::{#cr-closing}
+```{python}
+#| title: "Genero por area de conocimiento"
+cross = pd.crosstab(df["area"], df["genero"])
+cross = cross.reindex(columns=genero_opciones)
+area_order = cross.sum(axis=1).sort_values(ascending=True).index
 
-## This Is Us.
+gen_colors = {
+    "Mujer": ODS_BLUE, "Hombre": ODS_GREEN,
+    "No binarie": ODS_ORANGE, "Prefiero no decir": MEDIUM_GRAY
+}
 
-*150 people · 50 teams · Infinite potential.*
+traces = []
+for gen in genero_opciones:
+    if gen in cross.columns:
+        traces.append(go.Bar(
+            y=area_order,
+            x=cross.loc[area_order, gen],
+            name=gen,
+            orientation="h",
+            marker_color=gen_colors[gen],
+            hovertemplate=f"{gen}: " + "%{x} personas<extra></extra>",
+        ))
+fig = go.Figure(data=traces)
+_ = fig.update_layout(barmode="group", legend=dict(orientation="h", y=-0.15))
+_ = fig.update_xaxes(showgrid=False, title_text="")
+_ = fig.update_yaxes(showgrid=False)
+hackods_fig(fig)
+```
 
-:::
+## Row {height=40%} {.tabset}
 
-:::
+```{python}
+#| title: "Edad y genero"
+traces = []
+for i, gen in enumerate(genero_opciones):
+    subset = df[df["genero"] == gen]["edad"]
+    if len(subset) > 0:
+        traces.append(go.Box(
+            y=subset, name=gen,
+            marker_color=list(gen_colors.values())[i],
+            boxmean=True,
+        ))
+fig = go.Figure(data=traces)
+_ = fig.update_yaxes(title_text="Edad", showgrid=True, gridcolor="#f3f4f6")
+_ = fig.update_xaxes(showgrid=False)
+hackods_fig(fig, "Distribucion de edad por identidad de genero")
+```
+
+```{python}
+#| title: "Mapa geografico"
+estado_counts2 = df["estado"].value_counts().reset_index()
+estado_counts2.columns = ["estado", "count"]
+fig = px.sunburst(
+    estado_counts2, path=["estado"], values="count",
+    color_discrete_sequence=HACKODS_CAT,
+)
+_ = fig.update_traces(
+    hovertemplate="<b>%{label}</b><br>%{value} personas<extra></extra>",
+)
+hackods_fig(fig, "Estados representados")
+```
+
+# Nuestras herramientas
+
+## Row {height=10%}
+
+```{python}
+#| content: valuebox
+#| title: "Python Intermedio+"
+pct_py = ((df["python_nivel"] == "Intermedio") | (df["python_nivel"] == "Avanzado")).mean() * 100
+dict(icon="filetype-py", color="#0a97d9", value=f"{pct_py:.0f}%")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Quarto Intermedio+"
+pct_q = ((df["quarto_nivel"] == "Intermedio") | (df["quarto_nivel"] == "Avanzado")).mean() * 100
+dict(icon="file-earmark-code", color="#4CA146", value=f"{pct_q:.0f}%")
+```
+
+```{python}
+#| content: valuebox
+#| title: "GitHub Pages Intermedio+"
+pct_gh = ((df["github_nivel"] == "Intermedio") | (df["github_nivel"] == "Avanzado")).mean() * 100
+dict(icon="github", color="#E5233D", value=f"{pct_gh:.0f}%")
+```
+
+## Row {height=45%}
+
+```{python}
+#| title: "Nivel de conocimiento por herramienta"
+tools = ["Python", "Quarto", "GitHub Pages"]
+tool_cols = ["python_nivel", "quarto_nivel", "github_nivel"]
+nivel_order = ["Nunca lo use", "Principiante", "Intermedio", "Avanzado"]
+
+traces = []
+for nivel in nivel_order:
+    values = []
+    texts = []
+    for col in tool_cols:
+        count = (df[col] == nivel).sum()
+        pct = count / N * 100
+        values.append(pct)
+        texts.append(f"{nivel}: {pct:.0f}%")
+    traces.append(go.Bar(
+        y=tools,
+        x=values,
+        name=nivel,
+        orientation="h",
+        marker_color=LEVEL_COLORS[nivel],
+        text=texts,
+        textposition="inside",
+        textfont=dict(
+            color=WHITE if nivel in ["Intermedio", "Avanzado"] else DARK_GRAY,
+            size=12,
+        ),
+        hovertemplate=f"{nivel}: " + "%{x:.0f}%<extra></extra>",
+    ))
+fig = go.Figure(data=traces)
+_ = fig.update_layout(
+    barmode="stack",
+    legend=dict(orientation="h", y=-0.15, x=0.5, xanchor="center"),
+    yaxis=dict(autorange="reversed"),
+)
+_ = fig.update_xaxes(showgrid=False, showticklabels=False, range=[0, 100])
+_ = fig.update_yaxes(showgrid=False)
+hackods_fig(fig, "Nivel de conocimiento: Python, Quarto y GitHub Pages")
+```
+
+## Row {height=40%} {.tabset}
+
+```{python}
+#| title: "Python x Area"
+cross_py = pd.crosstab(df["area"], df["python_nivel"])
+cross_py = cross_py.reindex(columns=nivel_order, fill_value=0)
+area_order_h = cross_py.sum(axis=1).sort_values(ascending=True).index
+
+fig = px.imshow(
+    cross_py.loc[area_order_h],
+    color_continuous_scale=HACKODS_SEQ,
+    text_auto=True,
+    aspect="auto",
+)
+_ = fig.update_xaxes(side="bottom")
+hackods_fig(fig, "Nivel de Python por area de conocimiento")
+```
+
+```{python}
+#| title: "Quarto x Area"
+cross_q = pd.crosstab(df["area"], df["quarto_nivel"])
+cross_q = cross_q.reindex(columns=nivel_order, fill_value=0)
+
+fig = px.imshow(
+    cross_q.loc[area_order_h],
+    color_continuous_scale=HACKODS_SEQ,
+    text_auto=True,
+    aspect="auto",
+)
+_ = fig.update_xaxes(side="bottom")
+hackods_fig(fig, "Nivel de Quarto por area de conocimiento")
+```
+
+```{python}
+#| title: "GitHub Pages x Area"
+cross_gh = pd.crosstab(df["area"], df["github_nivel"])
+cross_gh = cross_gh.reindex(columns=nivel_order, fill_value=0)
+
+fig = px.imshow(
+    cross_gh.loc[area_order_h],
+    color_continuous_scale=HACKODS_SEQ,
+    text_auto=True,
+    aspect="auto",
+)
+_ = fig.update_xaxes(side="bottom")
+hackods_fig(fig, "Nivel de GitHub Pages por area de conocimiento")
+```
+
+# Nuestro planeta
+
+## Row {height=10%}
+
+```{python}
+#| content: valuebox
+#| title: "ODS mas votado"
+ods_top = df["ods_favorito"].value_counts().index[0]
+dict(icon="globe2", color=SDG_COLORS[ods_top], value=f"ODS {ods_top}: {SDG_NAMES[ods_top]}")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Reciclan"
+all_habitos = [h for persona in habitos_por_persona for h in persona]
+pct_recicla = sum(1 for p in habitos_por_persona if "Recicla" in p) / N * 100
+dict(icon="recycle", color="#4CA146", value=f"{pct_recicla:.0f}%")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Conocen su huella CO2"
+pct_huella = ((df["conciencia_carbono"] == "Si, calculo mi huella") | (df["conciencia_carbono"] == "Tengo una idea general")).mean() * 100
+dict(icon="cloud-fill", color="#0a97d9", value=f"{pct_huella:.0f}%")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Habitos sostenibles (prom.)"
+avg_habitos = np.mean([len(h) for h in habitos_por_persona])
+dict(icon="tree-fill", color="#59BA48", value=f"{avg_habitos:.1f}")
+```
+
+## Row {height=50%}
+
+```{python}
+#| title: "Que ODS nos importa mas?"
+ods_counts = df["ods_favorito"].value_counts().sort_index().reset_index()
+ods_counts.columns = ["ods", "votos"]
+ods_counts["nombre"] = ods_counts["ods"].map(lambda x: f"ODS {x}: {SDG_NAMES[x]}")
+ods_counts["color"] = ods_counts["ods"].map(SDG_COLORS)
+
+fig = go.Figure(go.Treemap(
+    labels=ods_counts["nombre"],
+    parents=[""] * len(ods_counts),
+    values=ods_counts["votos"],
+    marker_colors=ods_counts["color"],
+    textinfo="label+value",
+    textfont=dict(size=13, color=WHITE),
+    hovertemplate="<b>%{label}</b><br>%{value} votos<extra></extra>",
+))
+hackods_fig(fig, "Que ODS nos importa mas?")
+```
+
+```{python}
+#| title: "Que hacemos por el planeta?"
+from collections import Counter
+habitos_flat = Counter(all_habitos)
+hab_df = pd.DataFrame(habitos_flat.items(), columns=["habito", "count"]).sort_values("count")
+
+fig = go.Figure(go.Bar(
+    y=hab_df["habito"],
+    x=hab_df["count"],
+    orientation="h",
+    marker_color=ODS_BLUE,
+    text=hab_df["count"],
+    textposition="outside",
+    hovertemplate="%{y}: %{x} personas<extra></extra>",
+))
+_ = fig.update_xaxes(showgrid=False, showticklabels=False)
+_ = fig.update_yaxes(showgrid=False)
+hackods_fig(fig, "Habitos sostenibles de la comunidad")
+```
+
+## Row {height=35%} {.tabset}
+
+```{python}
+#| title: "Huella de carbono"
+carb_counts = df["conciencia_carbono"].value_counts()
+carb_order = ["Si, calculo mi huella", "Tengo una idea general", "He escuchado del tema", "No se que es"]
+carb_counts = carb_counts.reindex(carb_order)
+carb_colors = ["#01579b", "#0a97d9", "#7dd3f7", "#e5e7eb"]
+
+fig = go.Figure(go.Pie(
+    labels=carb_counts.index,
+    values=carb_counts.values,
+    hole=0.5,
+    marker_colors=carb_colors,
+    textinfo="label+percent",
+    textfont=dict(size=12),
+    hovertemplate="%{label}: %{value} personas (%{percent})<extra></extra>",
+))
+_ = fig.add_annotation(text="<b>Conciencia</b><br>CO₂", x=0.5, y=0.5,
+                   font=dict(size=16, family=TITLE_FONT, color=BLACK),
+                   showarrow=False)
+hackods_fig(fig, "Conoces tu huella de carbono?")
+```
+
+```{python}
+#| title: "Acciones climaticas"
+acc_counts = df["accion_climatica"].value_counts().sort_values()
+fig = go.Figure(go.Bar(
+    y=acc_counts.index,
+    x=acc_counts.values,
+    orientation="h",
+    marker_color=ODS_BLUE,
+    text=acc_counts.values,
+    textposition="outside",
+    hovertemplate="%{y}: %{x} personas<extra></extra>",
+))
+_ = fig.update_xaxes(showgrid=False, showticklabels=False)
+_ = fig.update_yaxes(showgrid=False)
+hackods_fig(fig, "Acciones climaticas que hemos tomado")
+```
+
+```{python}
+#| title: "ODS x Area"
+cross_ods = pd.crosstab(df["area"], df["ods_favorito"])
+cross_ods.columns = [f"ODS {c}" for c in cross_ods.columns]
+area_order_ods = cross_ods.sum(axis=1).sort_values(ascending=True).index
+
+fig = px.imshow(
+    cross_ods.loc[area_order_ods],
+    color_continuous_scale=HACKODS_SEQ,
+    text_auto=True,
+    aspect="auto",
+)
+_ = fig.update_xaxes(side="bottom", tickangle=45)
+hackods_fig(fig, "Que ODS importa a cada area de conocimiento?")
+```
+
+# El lado humano
+
+## Row {height=10%}
+
+```{python}
+#| content: valuebox
+#| title: "Horas de sueno (prom.)"
+dict(icon="moon-stars-fill", color="#126A9F", value=f"{df['horas_sueno'].mean():.1f} hrs")
+```
+
+```{python}
+#| content: valuebox
+#| title: "Snack #1"
+dict(icon="cup-hot-fill", color="#E5233D", value=df["snack"].value_counts().index[0])
+```
+
+```{python}
+#| content: valuebox
+#| title: "Animal espiritu #1"
+dict(icon="bug-fill", color="#4CA146", value=df["animal_espiritu"].value_counts().index[0])
+```
+
+```{python}
+#| content: valuebox
+#| title: "Superpoder #1"
+dict(icon="lightning-charge-fill", color="#F26A2D", value=df["superpoder"].value_counts().index[0])
+```
+
+## Row {height=45%}
+
+```{python}
+#| title: "Que escuchamos mientras hackeamos?"
+music_counts = df["genero_musical"].value_counts()
+pull_vals = [0.05 if i == 0 else 0 for i in range(len(music_counts))]
+
+fig = go.Figure(go.Pie(
+    labels=music_counts.index,
+    values=music_counts.values,
+    hole=0.5,
+    pull=pull_vals,
+    marker_colors=HACKODS_CAT[:len(music_counts)],
+    textinfo="label+percent",
+    textfont=dict(size=12),
+    hovertemplate="%{label}: %{value} personas (%{percent})<extra></extra>",
+))
+_ = fig.add_annotation(text=f"<b>{N}</b><br>playlists", x=0.5, y=0.5,
+                   font=dict(size=16, family=TITLE_FONT, color=BLACK),
+                   showarrow=False)
+hackods_fig(fig, "Nuestra playlist")
+```
+
+```{python}
+#| title: "Tu animal espiritu en reuniones"
+animal_counts = df["animal_espiritu"].value_counts().sort_values()
+animal_labels = [animal_emojis.get(a, a) for a in animal_counts.index]
+bar_colors = [HACKODS_CAT[i % len(HACKODS_CAT)] for i in range(len(animal_counts))]
+
+fig = go.Figure(go.Bar(
+    y=animal_labels,
+    x=animal_counts.values,
+    orientation="h",
+    marker_color=bar_colors,
+    text=animal_counts.values,
+    textposition="outside",
+    hovertemplate="%{y}: %{x} votos<extra></extra>",
+))
+_ = fig.update_xaxes(showgrid=False, showticklabels=False)
+_ = fig.update_yaxes(showgrid=False)
+hackods_fig(fig, "Animal espiritu en reuniones")
+```
+
+## Row {height=40%} {.tabset}
+
+```{python}
+#| title: "Snacks"
+snack_counts = df["snack"].value_counts().reset_index()
+snack_counts.columns = ["snack", "count"]
+
+fig = go.Figure(go.Treemap(
+    labels=snack_counts["snack"],
+    parents=[""] * len(snack_counts),
+    values=snack_counts["count"],
+    marker_colors=HACKODS_CAT[:len(snack_counts)],
+    textinfo="label+value",
+    hovertemplate="<b>%{label}</b><br>%{value} personas<extra></extra>",
+))
+hackods_fig(fig, "Snacks del hackathon")
+```
+
+```{python}
+#| title: "Horas de sueno"
+fig = go.Figure(go.Histogram(
+    x=df["horas_sueno"],
+    nbinsx=10,
+    marker_color=ODS_BLUE,
+    opacity=0.85,
+    hovertemplate="~%{x} hrs: %{y} personas<extra></extra>",
+))
+mean_sleep = df["horas_sueno"].mean()
+_ = fig.add_vline(x=mean_sleep, line_dash="dash", line_color=BLACK, line_width=2)
+_ = fig.add_annotation(text=f"Promedio: {mean_sleep:.1f} hrs", x=mean_sleep + 0.8, y=0.95,
+                   yref="paper", showarrow=False,
+                   font=dict(size=13, color=BLACK, family=TITLE_FONT))
+_ = fig.add_annotation(text="Zombies", x=1.5, y=0.85, yref="paper",
+                   showarrow=False, font=dict(size=11, color=MEDIUM_GRAY))
+_ = fig.add_annotation(text="Duermen como bebes", x=7.5, y=0.85, yref="paper",
+                   showarrow=False, font=dict(size=11, color=MEDIUM_GRAY))
+_ = fig.update_xaxes(title_text="Horas de sueno", showgrid=False)
+_ = fig.update_yaxes(title_text="Participantes", showgrid=True, gridcolor="#f3f4f6")
+hackods_fig(fig, "Cuantas horas dormimos durante el hackathon?")
+```
+
+```{python}
+#| title: "Superpoderes"
+sp_counts = df["superpoder"].value_counts().sort_values()
+fig = go.Figure(go.Bar(
+    y=sp_counts.index,
+    x=sp_counts.values,
+    orientation="h",
+    marker_color=ODS_BLUE,
+    text=sp_counts.values,
+    textposition="outside",
+    hovertemplate="%{y}: %{x} votos<extra></extra>",
+))
+_ = fig.update_xaxes(showgrid=False, showticklabels=False)
+_ = fig.update_yaxes(showgrid=False)
+hackods_fig(fig, "Si pudieras tener un superpoder para el hackathon...")
+```

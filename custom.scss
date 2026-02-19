@@ -1,0 +1,98 @@
+/*-- scss:defaults --*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+$font-family-sans-serif: "Inter", system-ui, -apple-system, sans-serif;
+$headings-font-family: "Space Grotesk", system-ui, sans-serif;
+
+/* Navbar blanca con acentos multicolor ODS */
+$body-bg: #ffffff;
+$body-color: #1a1a1a;
+$navbar-bg: #ffffff;
+$navbar-fg: #1a1a1a;
+$navbar-hl: #0a97d9;
+$link-color: #0a97d9;
+$card-bg: #f9fafb;
+
+/*-- scss:rules --*/
+
+/* Navbar estilo HackODS: fondo blanco, borde multicolor */
+.navbar {
+  border-bottom: 4px solid transparent !important;
+  border-image: linear-gradient(
+    to right,
+    #E5233D, #DDA73A, #4CA146, #C5192D, #EF402C,
+    #27BFE6, #FBC412, #A31C44, #F26A2D, #E01483,
+    #F89D2A, #BF8D2C, #407F46, #1F97D4, #59BA48,
+    #126A9F, #13496B
+  ) 1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.navbar .navbar-brand {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 700;
+  color: #1a1a1a !important;
+}
+
+.navbar .navbar-nav .nav-link {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
+}
+
+/* Colores ODS para cada pestaña del navbar */
+.navbar .navbar-nav .nav-link:nth-child(1) { color: #0a97d9 !important; }
+.navbar .navbar-nav .nav-link:nth-child(2) { color: #4CA146 !important; }
+.navbar .navbar-nav .nav-link:nth-child(3) { color: #E01483 !important; }
+.navbar .navbar-nav .nav-link:nth-child(4) { color: #407F46 !important; }
+.navbar .navbar-nav .nav-link:nth-child(5) { color: #F26A2D !important; }
+
+.navbar .navbar-nav .nav-link:hover {
+  opacity: 0.7;
+}
+
+.navbar .navbar-nav .nav-link.active {
+  border-bottom: 3px solid currentColor;
+}
+
+/* Cards */
+.card {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  background-color: #0a97d9;
+  color: #ffffff;
+  border-radius: 12px 12px 0 0 !important;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+}
+
+.valuebox .valuebox-value {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  color: #1a1a1a;
+}
+
+/* Tabs internos con colores ODS */
+.nav-tabs .nav-link.active {
+  border-bottom: 3px solid #0a97d9;
+  color: #0a97d9;
+  font-weight: 600;
+}
+
+.nav-tabs .nav-link {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.nav-tabs .nav-link:hover {
+  color: #0a97d9;
+}
