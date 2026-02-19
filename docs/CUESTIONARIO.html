@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>cuestionario</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1d4f84655f446305ac42a8f1abcf7405.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="cuestionario-conoce-a-la-comunidad-hackods" class="level1">
+<h1>Cuestionario: Conoce a la Comunidad HackODS</h1>
+<blockquote class="blockquote">
+<p>Formulario de registro para participantes del HackODS. Las respuestas alimentan el dashboard “Conoce a la Comunidad HackODS”. Implementar en Google Forms.</p>
+</blockquote>
+<hr>
+<section id="seccion-1-sobre-ti" class="level2">
+<h2 class="anchored" data-anchor-id="seccion-1-sobre-ti">Seccion 1: Sobre ti</h2>
+<blockquote class="blockquote">
+<p>Queremos conocerte. Estas preguntas nos ayudan a saber quienes somos como comunidad.</p>
+</blockquote>
+<section id="p1.-me-identifico-como" class="level3">
+<h3 class="anchored" data-anchor-id="p1.-me-identifico-como">P1. Me identifico como:</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>genero</code></li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Mujer</li>
+<li>Hombre</li>
+<li>No binarie</li>
+<li>Prefiero no decirlo</li>
+<li>Otro</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Panorama General &gt; Me identifico como, Quienes somos &gt; Genero por area</li>
+</ul>
+</section>
+<section id="p2.-edad" class="level3">
+<h3 class="anchored" data-anchor-id="p2.-edad">P2. Edad</h3>
+<ul>
+<li><strong>Tipo</strong>: Numero (respuesta corta, validar entero entre 15 y 65)</li>
+<li><strong>Columna en datos</strong>: <code>edad</code></li>
+<li><strong>Alimenta</strong>: Panorama General &gt; Distribucion de edad, Quienes somos &gt; Totales (edad promedio)</li>
+</ul>
+</section>
+<section id="p3.-estado-de-procedencia" class="level3">
+<h3 class="anchored" data-anchor-id="p3.-estado-de-procedencia">P3. Estado de procedencia</h3>
+<ul>
+<li><strong>Tipo</strong>: Lista desplegable (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>estado</code></li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Aguascalientes</li>
+<li>Baja California</li>
+<li>Baja California Sur</li>
+<li>Campeche</li>
+<li>Chiapas</li>
+<li>Chihuahua</li>
+<li>CDMX</li>
+<li>Coahuila</li>
+<li>Colima</li>
+<li>Durango</li>
+<li>Estado de Mexico</li>
+<li>Guanajuato</li>
+<li>Guerrero</li>
+<li>Hidalgo</li>
+<li>Jalisco</li>
+<li>Michoacan</li>
+<li>Morelos</li>
+<li>Nayarit</li>
+<li>Nuevo Leon</li>
+<li>Oaxaca</li>
+<li>Puebla</li>
+<li>Queretaro</li>
+<li>Quintana Roo</li>
+<li>San Luis Potosi</li>
+<li>Sinaloa</li>
+<li>Sonora</li>
+<li>Tabasco</li>
+<li>Tamaulipas</li>
+<li>Tlaxcala</li>
+<li>Veracruz</li>
+<li>Yucatan</li>
+<li>Zacatecas</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Quienes somos &gt; De que estado venimos, Mapa geografico, Totales (Estado #1)</li>
+</ul>
+</section>
+<section id="p4.-area-de-conocimiento" class="level3">
+<h3 class="anchored" data-anchor-id="p4.-area-de-conocimiento">P4. Area de conocimiento</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>area</code></li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Ingenierias</li>
+<li>Ciencias</li>
+<li>Ciencias Sociales</li>
+<li>Humanidades</li>
+<li>Artes</li>
+<li>Salud</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Panorama General &gt; Areas de conocimiento, Quienes somos &gt; Genero por area</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="seccion-2-tus-herramientas" class="level2">
+<h2 class="anchored" data-anchor-id="seccion-2-tus-herramientas">Seccion 2: Tus herramientas</h2>
+<blockquote class="blockquote">
+<p>En el HackODS usaremos Python, Quarto y GitHub Pages. Queremos saber de donde partimos.</p>
+</blockquote>
+<section id="p5.-nivel-de-python" class="level3">
+<h3 class="anchored" data-anchor-id="p5.-nivel-de-python">P5. Nivel de Python</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>python_nivel</code></li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Nunca lo use</li>
+<li>Principiante</li>
+<li>Intermedio</li>
+<li>Avanzado</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Nuestras herramientas &gt; Totales, Python</li>
+</ul>
+</section>
+<section id="p6.-nivel-de-quarto" class="level3">
+<h3 class="anchored" data-anchor-id="p6.-nivel-de-quarto">P6. Nivel de Quarto</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>quarto_nivel</code></li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Nunca lo use</li>
+<li>Principiante</li>
+<li>Intermedio</li>
+<li>Avanzado</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Nuestras herramientas &gt; Totales, Quarto</li>
+</ul>
+</section>
+<section id="p7.-nivel-de-github-pages" class="level3">
+<h3 class="anchored" data-anchor-id="p7.-nivel-de-github-pages">P7. Nivel de GitHub Pages</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>github_nivel</code></li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Nunca lo use</li>
+<li>Principiante</li>
+<li>Intermedio</li>
+<li>Avanzado</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Nuestras herramientas &gt; Totales, GitHub Pages</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="seccion-3-tu-planeta" class="level2">
+<h2 class="anchored" data-anchor-id="seccion-3-tu-planeta">Seccion 3: Tu planeta</h2>
+<blockquote class="blockquote">
+<p>Los ODS son el corazon de este hackathon. Queremos saber que te mueve.</p>
+</blockquote>
+<section id="p8.-ods-favorito" class="level3">
+<h3 class="anchored" data-anchor-id="p8.-ods-favorito">P8. ODS favorito</h3>
+<ul>
+<li><strong>Tipo</strong>: Lista desplegable (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>ods_favorito</code></li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>ODS 1: Fin de la pobreza</li>
+<li>ODS 2: Hambre cero</li>
+<li>ODS 3: Salud y bienestar</li>
+<li>ODS 4: Educacion de calidad</li>
+<li>ODS 5: Igualdad de genero</li>
+<li>ODS 6: Agua limpia y saneamiento</li>
+<li>ODS 7: Energia asequible y no contaminante</li>
+<li>ODS 8: Trabajo decente y crecimiento economico</li>
+<li>ODS 9: Industria, innovacion e infraestructura</li>
+<li>ODS 10: Reduccion de las desigualdades</li>
+<li>ODS 11: Ciudades y comunidades sostenibles</li>
+<li>ODS 12: Produccion y consumo responsables</li>
+<li>ODS 13: Accion por el clima</li>
+<li>ODS 14: Vida submarina</li>
+<li>ODS 15: Vida de ecosistemas terrestres</li>
+<li>ODS 16: Paz, justicia e instituciones solidas</li>
+<li>ODS 17: Alianzas para lograr los objetivos</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Nuestro planeta &gt; Totales (ODS mas votado), ODS favoritos</li>
+</ul>
+</section>
+<section id="p9.-habitos-sostenibles" class="level3">
+<h3 class="anchored" data-anchor-id="p9.-habitos-sostenibles">P9. Habitos sostenibles</h3>
+<ul>
+<li><strong>Tipo</strong>: Casillas de verificacion (seleccion multiple)</li>
+<li><strong>Columna en datos</strong>: <code>habitos</code> (una columna por habito, o separadas por coma)</li>
+<li><strong>Pregunta</strong>: “Cuales de estos habitos sostenibles practicas?”</li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Reciclo</li>
+<li>Uso transporte publico</li>
+<li>Reduzco plastico</li>
+<li>Composto</li>
+<li>Ahorro energia</li>
+<li>Consumo local</li>
+<li>Uso bici</li>
+<li>Llevo dieta plant-based</li>
+<li>Ahorro agua</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Nuestro planeta &gt; Totales (% reciclan, habitos promedio), Habitos sostenibles</li>
+</ul>
+</section>
+<section id="p10.-conciencia-de-huella-de-carbono" class="level3">
+<h3 class="anchored" data-anchor-id="p10.-conciencia-de-huella-de-carbono">P10. Conciencia de huella de carbono</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>conciencia_carbono</code></li>
+<li><strong>Pregunta</strong>: “Que tanto conoces sobre tu huella de carbono?”</li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Si, calculo mi huella</li>
+<li>Tengo una idea general</li>
+<li>He escuchado del tema</li>
+<li>No se que es</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Nuestro planeta &gt; Totales (% conocen huella), Huella de carbono</li>
+</ul>
+</section>
+<section id="p11.-acciones-climaticas" class="level3">
+<h3 class="anchored" data-anchor-id="p11.-acciones-climaticas">P11. Acciones climaticas</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>accion_climatica</code></li>
+<li><strong>Pregunta</strong>: “Cual es la principal accion climatica que has tomado?”</li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Marcha o protesta</li>
+<li>Firma peticiones</li>
+<li>Educa a otres</li>
+<li>Proyecto comunitario</li>
+<li>Contenido en redes</li>
+<li>Voluntariado</li>
+<li>Donaciones</li>
+<li>Ninguna aun</li>
+</ul></li>
+<li><strong>Alimenta</strong>: Nuestro planeta &gt; Acciones climaticas</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="seccion-4-tu-lado-humano" class="level2">
+<h2 class="anchored" data-anchor-id="seccion-4-tu-lado-humano">Seccion 4: Tu lado humano</h2>
+<blockquote class="blockquote">
+<p>Ultimo! Unas preguntas divertidas para conocernos mas alla del codigo.</p>
+</blockquote>
+<section id="p12.-genero-musical-para-hackear" class="level3">
+<h3 class="anchored" data-anchor-id="p12.-genero-musical-para-hackear">P12. Genero musical para hackear</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>genero_musical</code></li>
+<li><strong>Pregunta</strong>: “Que musica escuchas mientras programas?”</li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Pop</li>
+<li>Rock</li>
+<li>Reggaeton</li>
+<li>Lo-fi / Chill</li>
+<li>Electronica</li>
+<li>Hip-hop</li>
+<li>Clasica</li>
+<li>Cumbia</li>
+<li>K-pop</li>
+<li>Otro</li>
+</ul></li>
+<li><strong>Alimenta</strong>: El lado humano &gt; Musica para hackear</li>
+</ul>
+</section>
+<section id="p13.-animal-espiritu-en-reuniones" class="level3">
+<h3 class="anchored" data-anchor-id="p13.-animal-espiritu-en-reuniones">P13. Animal espiritu en reuniones</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>animal_espiritu</code></li>
+<li><strong>Pregunta</strong>: “Cual es tu animal espiritu en reuniones de equipo?”</li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Ajolote (tranquilo, se adapta)</li>
+<li>Perezoso (necesita cafe primero)</li>
+<li>Buho (nocturno, piensa mucho)</li>
+<li>Gato (independiente, aparece cuando quiere)</li>
+<li>Capibara (se lleva con todes)</li>
+<li>Loro (habla mucho, tiene ideas)</li>
+<li>Pinguino (trabaja en equipo)</li>
+<li>Perro golden (entusiasta, leal)</li>
+</ul></li>
+<li><strong>Alimenta</strong>: El lado humano &gt; Totales (Animal #1), Animal espiritu</li>
+</ul>
+</section>
+<section id="p14.-snack-del-hackathon" class="level3">
+<h3 class="anchored" data-anchor-id="p14.-snack-del-hackathon">P14. Snack del hackathon</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>snack</code></li>
+<li><strong>Pregunta</strong>: “Tu snack ideal para un hackathon?”</li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>Pizza</li>
+<li>Cafe</li>
+<li>Galletas</li>
+<li>Fruta</li>
+<li>Papas / Chips</li>
+<li>Tacos</li>
+<li>Chocolate</li>
+<li>Gomitas</li>
+<li>Nada</li>
+<li>Otro</li>
+</ul></li>
+<li><strong>Alimenta</strong>: El lado humano &gt; Totales (Snack #1), Snacks del hackathon</li>
+</ul>
+</section>
+<section id="p15.-horas-de-sueno" class="level3">
+<h3 class="anchored" data-anchor-id="p15.-horas-de-sueno">P15. Horas de sueno</h3>
+<ul>
+<li><strong>Tipo</strong>: Numero (respuesta corta, validar entre 0 y 12, permitir decimales)</li>
+<li><strong>Columna en datos</strong>: <code>horas_sueno</code></li>
+<li><strong>Pregunta</strong>: “Cuantas horas duermes en promedio durante un hackathon?”</li>
+<li><strong>Alimenta</strong>: El lado humano &gt; Totales (Horas promedio), Horas de sueno</li>
+</ul>
+</section>
+<section id="p16.-superpoder-para-el-hackathon" class="level3">
+<h3 class="anchored" data-anchor-id="p16.-superpoder-para-el-hackathon">P16. Superpoder para el hackathon</h3>
+<ul>
+<li><strong>Tipo</strong>: Opcion multiple (una respuesta)</li>
+<li><strong>Columna en datos</strong>: <code>superpoder</code></li>
+<li><strong>Pregunta</strong>: “Si pudieras tener un superpoder para el hackathon, cual seria?”</li>
+<li><strong>Opciones</strong>:
+<ul>
+<li>No dormir nunca</li>
+<li>Debuggear con la mente</li>
+<li>Wifi infinito</li>
+<li>Entender cualquier dataset</li>
+<li>Hablar todos los idiomas</li>
+<li>Teletransportarse</li>
+</ul></li>
+<li><strong>Alimenta</strong>: El lado humano &gt; Totales (Superpoder #1), Superpoderes</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="resumen" class="level2">
+<h2 class="anchored" data-anchor-id="resumen">Resumen</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Seccion</th>
+<th>Preguntas</th>
+<th>Tipo principal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sobre ti</td>
+<td>P1-P4</td>
+<td>Opcion multiple / numero / desplegable</td>
+</tr>
+<tr class="even">
+<td>Tus herramientas</td>
+<td>P5-P7</td>
+<td>Opcion multiple (escala de nivel)</td>
+</tr>
+<tr class="odd">
+<td>Tu planeta</td>
+<td>P8-P11</td>
+<td>Desplegable / casillas / opcion multiple</td>
+</tr>
+<tr class="even">
+<td>Tu lado humano</td>
+<td>P12-P16</td>
+<td>Opcion multiple / numero</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total</strong>: 16 preguntas. Tiempo estimado: 3-5 minutos.</p>
+<section id="mapeo-de-columnas-del-dataframe" class="level3">
+<h3 class="anchored" data-anchor-id="mapeo-de-columnas-del-dataframe">Mapeo de columnas del DataFrame</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Columna</th>
+<th>Pregunta</th>
+<th>Tipo Python</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>genero</code></td>
+<td>P1</td>
+<td>str</td>
+</tr>
+<tr class="even">
+<td><code>edad</code></td>
+<td>P2</td>
+<td>int</td>
+</tr>
+<tr class="odd">
+<td><code>estado</code></td>
+<td>P3</td>
+<td>str</td>
+</tr>
+<tr class="even">
+<td><code>area</code></td>
+<td>P4</td>
+<td>str</td>
+</tr>
+<tr class="odd">
+<td><code>python_nivel</code></td>
+<td>P5</td>
+<td>str</td>
+</tr>
+<tr class="even">
+<td><code>quarto_nivel</code></td>
+<td>P6</td>
+<td>str</td>
+</tr>
+<tr class="odd">
+<td><code>github_nivel</code></td>
+<td>P7</td>
+<td>str</td>
+</tr>
+<tr class="even">
+<td><code>ods_favorito</code></td>
+<td>P8</td>
+<td>int (1-17)</td>
+</tr>
+<tr class="odd">
+<td><code>habitos</code></td>
+<td>P9</td>
+<td>list[str]</td>
+</tr>
+<tr class="even">
+<td><code>conciencia_carbono</code></td>
+<td>P10</td>
+<td>str</td>
+</tr>
+<tr class="odd">
+<td><code>accion_climatica</code></td>
+<td>P11</td>
+<td>str</td>
+</tr>
+<tr class="even">
+<td><code>genero_musical</code></td>
+<td>P12</td>
+<td>str</td>
+</tr>
+<tr class="odd">
+<td><code>animal_espiritu</code></td>
+<td>P13</td>
+<td>str</td>
+</tr>
+<tr class="even">
+<td><code>snack</code></td>
+<td>P14</td>
+<td>str</td>
+</tr>
+<tr class="odd">
+<td><code>horas_sueno</code></td>
+<td>P15</td>
+<td>float</td>
+</tr>
+<tr class="even">
+<td><code>superpoder</code></td>
+<td>P16</td>
+<td>str</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

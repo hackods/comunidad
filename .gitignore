@@ -19,3 +19,4 @@ wheels/
 *.quarto_ipynb
 
 **/*.quarto_ipynb
+CORREOS.md

@@ -102,122 +102,93 @@ def hackods_fig(fig, title="", height=None):
 
 
 # ============================================================
-# DATOS SIMULADOS — 150 participantes, 50 equipos
+# DATOS REALES — CSV del formulario Google Forms
 # ============================================================
-np.random.seed(42)
-N = 150
-TEAMS = 50
+CSV_PATH = "Cuestionario_ Conoce a la Comunidad HackODS (Responses) - Form Responses 1.csv"
+df_raw = pd.read_csv(CSV_PATH)
 
-# --- Identidad de genero ---
-genero_opciones = ["Mujer", "Hombre", "No binarie", "Prefiero no decir"]
-genero_pesos = [0.44, 0.40, 0.10, 0.06]
-generos = np.random.choice(genero_opciones, size=N, p=genero_pesos)
-
-# --- Edad ---
-edades = np.random.normal(loc=23, scale=3.5, size=N).clip(18, 40).astype(int)
-
-# --- Estado ---
-estados_opciones = [
-    "CDMX", "Estado de Mexico", "Jalisco", "Nuevo Leon", "Puebla",
-    "Queretaro", "Veracruz", "Guanajuato", "Michoacan", "Oaxaca",
-    "Yucatan", "Chiapas", "Sonora", "Morelos", "Hidalgo", "Otro"
-]
-estados_pesos = [
-    0.25, 0.12, 0.10, 0.08, 0.07, 0.06, 0.05, 0.04,
-    0.04, 0.04, 0.03, 0.03, 0.02, 0.02, 0.02, 0.03
-]
-estados = np.random.choice(estados_opciones, size=N, p=estados_pesos)
-
-# --- Area de conocimiento ---
-area_opciones = ["Ingenierias", "Ciencias", "Ciencias Sociales", "Humanidades", "Artes", "Salud"]
-area_pesos = [0.30, 0.25, 0.18, 0.12, 0.08, 0.07]
-areas = np.random.choice(area_opciones, size=N, p=area_pesos)
-
-# --- Nivel de herramientas ---
-niveles = ["Nunca lo use", "Principiante", "Intermedio", "Avanzado"]
-
-python_nivel = np.random.choice(niveles, size=N, p=[0.08, 0.25, 0.42, 0.25])
-quarto_nivel = np.random.choice(niveles, size=N, p=[0.35, 0.30, 0.25, 0.10])
-github_nivel = np.random.choice(niveles, size=N, p=[0.20, 0.32, 0.30, 0.18])
-
-# --- ODS favorito ---
-ods_favoritos = np.random.choice(list(range(1, 18)), size=N, p=[
-    0.03, 0.04, 0.06, 0.08, 0.05, 0.07, 0.06, 0.03,
-    0.04, 0.03, 0.05, 0.05, 0.15, 0.08, 0.07, 0.04, 0.07
-])
-
-# --- Habitos sostenibles ---
-habitos_lista = [
-    "Recicla", "Usa transporte publico", "Reduce plastico",
-    "Composta", "Ahorra energia", "Consume local", "Usa bici",
-    "Dieta plant-based", "Ahorra agua"
-]
-habitos_por_persona = [np.random.choice(habitos_lista, size=np.random.randint(1, 5), replace=False).tolist() for _ in range(N)]
-
-# --- Conciencia de huella de carbono ---
-carbono_opciones = [
-    "Si, calculo mi huella", "Tengo una idea general",
-    "He escuchado del tema", "No se que es"
-]
-carbono = np.random.choice(carbono_opciones, size=N, p=[0.12, 0.35, 0.38, 0.15])
-
-# --- Acciones climaticas ---
-acciones_opciones = [
-    "Marcha/protesta", "Firma peticiones", "Educa a otres",
-    "Proyecto comunitario", "Contenido en redes", "Voluntariado",
-    "Donaciones", "Ninguna aun"
-]
-acciones = np.random.choice(acciones_opciones, size=N, p=[0.08, 0.15, 0.18, 0.12, 0.20, 0.10, 0.05, 0.12])
-
-# --- Datos fun ---
-genero_musical_opciones = [
-    "Pop", "Rock", "Reggaeton", "Lo-fi/Chill", "Electronica",
-    "Hip-hop", "Clasica", "Cumbia", "K-pop", "Otro"
-]
-genero_musical = np.random.choice(genero_musical_opciones, size=N, p=[
-    0.15, 0.12, 0.14, 0.13, 0.10, 0.08, 0.05, 0.08, 0.10, 0.05
-])
-
-animal_opciones = ["Ajolote", "Perezoso", "Buho", "Gato", "Capibara", "Loro", "Pinguino", "Perro golden"]
-animal_emojis = {
-    "Ajolote": "Ajolote 🦎", "Perezoso": "Perezoso 🦥", "Buho": "Buho 🦉",
-    "Gato": "Gato 🐱", "Capibara": "Capibara 🦫", "Loro": "Loro 🦜",
-    "Pinguino": "Pinguino 🐧", "Perro golden": "Perro golden 🐕"
-}
-animales = np.random.choice(animal_opciones, size=N, p=[0.18, 0.15, 0.14, 0.12, 0.12, 0.10, 0.10, 0.09])
-
-snack_opciones = ["Pizza", "Cafe", "Galletas", "Fruta", "Papas/Chips", "Tacos", "Chocolate", "Gomitas", "Nada", "Otro"]
-snacks = np.random.choice(snack_opciones, size=N, p=[0.18, 0.15, 0.10, 0.08, 0.12, 0.10, 0.12, 0.07, 0.04, 0.04])
-
-horas_sueno = np.random.normal(loc=4.5, scale=1.5, size=N).clip(0, 9).round(1)
-
-superpoder_opciones = [
-    "No dormir nunca", "Debuggear con la mente", "Wifi infinito",
-    "Entender cualquier dataset", "Hablar todos los idiomas", "Teletransportarse"
-]
-superpoderes = np.random.choice(superpoder_opciones, size=N, p=[0.25, 0.20, 0.18, 0.15, 0.12, 0.10])
-
-# --- DataFrame maestro ---
-equipos = [f"Equipo {i // 3 + 1}" for i in range(N)]
-df = pd.DataFrame({
-    "id": range(1, N + 1),
-    "equipo": equipos,
-    "genero": generos,
-    "edad": edades,
-    "estado": estados,
-    "area": areas,
-    "python_nivel": python_nivel,
-    "quarto_nivel": quarto_nivel,
-    "github_nivel": github_nivel,
-    "ods_favorito": ods_favoritos,
-    "conciencia_carbono": carbono,
-    "accion_climatica": acciones,
-    "genero_musical": genero_musical,
-    "animal_espiritu": animales,
-    "snack": snacks,
-    "horas_sueno": horas_sueno,
-    "superpoder": superpoderes,
+# Renombrar columnas por posicion
+df = df_raw.rename(columns={
+    df_raw.columns[1]: "genero",
+    df_raw.columns[2]: "edad",
+    df_raw.columns[3]: "estado",
+    df_raw.columns[4]: "area",
+    df_raw.columns[5]: "python_nivel",
+    df_raw.columns[6]: "quarto_nivel",
+    df_raw.columns[7]: "github_nivel",
+    df_raw.columns[8]: "ods_favorito_raw",
+    df_raw.columns[9]: "habitos_raw",
+    df_raw.columns[10]: "acciones_raw",
+    df_raw.columns[11]: "genero_musical",
+    df_raw.columns[12]: "animal_espiritu_raw",
+    df_raw.columns[13]: "snack",
+    df_raw.columns[14]: "horas_sueno",
+    df_raw.columns[15]: "superpoder",
 })
+
+N = len(df)
+TEAMS = max(1, N // 3)
+
+# --- Limpiar edad ---
+df["edad"] = pd.to_numeric(df["edad"], errors="coerce").fillna(0).astype(int)
+
+# --- Limpiar horas de sueno ---
+df["horas_sueno"] = pd.to_numeric(df["horas_sueno"], errors="coerce").fillna(0)
+
+# --- Normalizar niveles (acentos) ---
+_nivel_clean = {
+    "Nunca lo usé": "Nunca lo use", "Nunca lo use": "Nunca lo use",
+    "Principiante": "Principiante", "Intermedio": "Intermedio", "Avanzado": "Avanzado",
+}
+for _col in ["python_nivel", "quarto_nivel", "github_nivel"]:
+    df[_col] = df[_col].map(_nivel_clean).fillna(df[_col])
+
+# --- Normalizar areas (acentos) ---
+_area_clean = {
+    "Ingenierías": "Ingenierias", "Ingenierias": "Ingenierias",
+    "Ciencias": "Ciencias", "Ciencias Sociales": "Ciencias Sociales",
+    "Humanidades": "Humanidades", "Artes": "Artes", "Salud": "Salud",
+}
+df["area"] = df["area"].map(_area_clean).fillna(df["area"])
+
+# --- ODS: nombre del formulario a numero ---
+_ods_keywords = {
+    1: "pobreza", 2: "hambre", 3: "salud", 4: "educaci",
+    5: "igualdad", 6: "agua", 7: "energ", 8: "trabajo",
+    9: "industria", 10: "desigualdad", 11: "ciudad", 12: "producci",
+    13: "clima", 14: "submarina", 15: "ecosistema", 16: "paz", 17: "alianza",
+}
+def _match_ods(name):
+    if pd.isna(name):
+        return None
+    name_lower = str(name).lower()
+    for num, kw in _ods_keywords.items():
+        if kw in name_lower:
+            return num
+    return None
+df["ods_favorito"] = df["ods_favorito_raw"].apply(_match_ods)
+
+# --- Animal: extraer nombre antes de ":" ---
+df["animal_espiritu"] = df["animal_espiritu_raw"].str.split(":").str[0].str.strip()
+
+# --- Habitos: split por coma (multi-select) ---
+habitos_por_persona = df["habitos_raw"].fillna("").str.split(r",\s*").tolist()
+habitos_por_persona = [[h.strip() for h in p if h.strip()] for p in habitos_por_persona]
+
+# --- Acciones: split por coma (multi-select) ---
+acciones_por_persona = df["acciones_raw"].fillna("").str.split(r",\s*").tolist()
+acciones_por_persona = [[a.strip() for a in p if a.strip()] for p in acciones_por_persona]
+
+# --- Opciones de genero ---
+genero_opciones = ["Mujer", "Hombre", "No binarie", "Prefiero no decirlo", "Otro"]
+
+# --- Emojis de animales ---
+animal_emojis = {
+    "Ajolote": "Ajolote 🦎", "Perezoso": "Perezoso 🦥", "Búho": "Búho 🦉",
+    "Buho": "Buho 🦉", "Gato": "Gato 🐱", "Capibara": "Capibara 🦫",
+    "Loro": "Loro 🦜", "Pingüino": "Pingüino 🐧", "Pinguino": "Pinguino 🐧",
+    "Perro golden": "Perro golden 🐕",
+}
 
 # Conteos utiles
 n_estados = df["estado"].nunique()
@@ -254,12 +225,12 @@ dict(icon="geo-alt-fill", color="#E5233D", value=f"{n_estados}")
 dict(icon="mortarboard-fill", color="#F26A2D", value=n_areas)
 ```
 
-### Identidad de genero
+### Me identifico como
 
 ```{python}
-#| title: "Identidad de genero"
-gen_colors_map = {"Mujer": ODS_BLUE, "Hombre": ODS_GREEN, "No binarie": ODS_ORANGE, "Prefiero no decir": MEDIUM_GRAY}
-gen_order = ["Mujer", "Hombre", "No binarie", "Prefiero no decir"]
+#| title: "Me identifico como"
+gen_colors_map = {"Mujer": ODS_BLUE, "Hombre": ODS_GREEN, "No binarie": ODS_ORANGE, "Prefiero no decirlo": MEDIUM_GRAY, "Otro": ODS_TEAL}
+gen_order = ["Mujer", "Hombre", "No binarie", "Prefiero no decirlo", "Otro"]
 gen_counts = df["genero"].value_counts()
 
 traces = []
@@ -267,23 +238,36 @@ for gen in gen_order:
     count = gen_counts.get(gen, 0)
     pct = count / N * 100
     traces.append(go.Bar(
-        y=["Identidad de genero"],
-        x=[pct],
+        x=[""],
+        y=[pct],
         name=gen,
-        orientation="h",
         marker_color=gen_colors_map[gen],
-        text=[f"{gen}: {count} ({pct:.0f}%)"],
-        textposition="inside",
-        textfont=dict(color=WHITE, size=13),
         hovertemplate=f"{gen}: {count} personas ({pct:.0f}%)<extra></extra>",
+        showlegend=False,
     ))
+
 fig = go.Figure(data=traces, layout=dict(
     barmode="stack",
-    legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center"),
-    yaxis=dict(showticklabels=False, showgrid=False),
-    xaxis=dict(showgrid=False, showticklabels=False, range=[0, 100]),
+    xaxis=dict(showticklabels=False, showgrid=False),
+    yaxis=dict(showgrid=False, showticklabels=False, range=[0, 100]),
 ))
-hackods_fig(fig, "Identidad de genero")
+
+# Anotaciones sobre cada segmento
+cumulative = 0
+for gen in gen_order:
+    count = gen_counts.get(gen, 0)
+    pct = count / N * 100
+    mid = cumulative + pct / 2
+    _ = fig.add_annotation(
+        x=0, y=mid,
+        text=f"<b>{gen}</b><br>{count} · {pct:.0f}%",
+        showarrow=False,
+        font=dict(color=WHITE, size=13),
+        xanchor="center",
+    )
+    cumulative += pct
+
+hackods_fig(fig, "Me identifico como")
 ```
 
 ### Distribucion de edad
@@ -361,23 +345,6 @@ pct_mujeres = (df["genero"] == "Mujer").mean() * 100
 dict(icon="person-fill", color="#F26A2D", value=f"{pct_mujeres:.0f}%")
 ```
 
-### De que estado venimos?
-
-```{python}
-#| title: "De que estado venimos?"
-estado_counts = df["estado"].value_counts().reset_index()
-estado_counts.columns = ["estado", "count"]
-fig = px.treemap(
-    estado_counts, path=["estado"], values="count",
-    color_discrete_sequence=HACKODS_CAT,
-)
-_ = fig.update_traces(
-    textinfo="label+value",
-    hovertemplate="<b>%{label}</b><br>%{value} personas<extra></extra>",
-)
-hackods_fig(fig, "De que estado venimos?")
-```
-
 ### Genero por area de conocimiento
 
 ```{python}
@@ -389,7 +356,7 @@ area_order = cross.sum(axis=1).sort_values(ascending=True).index
 
 gen_colors = {
     "Mujer": ODS_BLUE, "Hombre": ODS_GREEN,
-    "No binarie": ODS_ORANGE, "Prefiero no decir": MEDIUM_GRAY
+    "No binarie": ODS_ORANGE, "Prefiero no decirlo": MEDIUM_GRAY, "Otro": ODS_TEAL
 }
 
 traces = []
@@ -638,13 +605,6 @@ dict(icon="recycle", color="#4CA146", value=f"{pct_recicla:.0f}%")
 
 ```{python}
 #| content: valuebox
-#| title: "Conocen su huella CO2"
-pct_huella = ((df["conciencia_carbono"] == "Si, calculo mi huella") | (df["conciencia_carbono"] == "Tengo una idea general")).mean() * 100
-dict(icon="cloud-fill", color="#0a97d9", value=f"{pct_huella:.0f}%")
-```
-
-```{python}
-#| content: valuebox
 #| title: "Habitos sostenibles (prom.)"
 avg_habitos = np.mean([len(h) for h in habitos_por_persona])
 dict(icon="tree-fill", color="#59BA48", value=f"{avg_habitos:.1f}")
@@ -691,32 +651,14 @@ fig = go.Figure(go.Treemap(
 hackods_fig(fig)
 ```
 
-### Huella de carbono
-
-```{python}
-#| title: "Conoces tu huella de carbono?"
-carb_counts = df["conciencia_carbono"].value_counts().reset_index()
-carb_counts.columns = ["nivel", "count"]
-carb_colors = ["#01579b", "#0a97d9", "#7dd3f7", "#e5e7eb"]
-
-fig = go.Figure(go.Treemap(
-    labels=carb_counts["nivel"],
-    parents=[""] * len(carb_counts),
-    values=carb_counts["count"],
-    marker_colors=carb_colors[:len(carb_counts)],
-    textinfo="label+value",
-    textfont=dict(size=13, color=WHITE),
-    hovertemplate="<b>%{label}</b><br>%{value} personas<extra></extra>",
-))
-hackods_fig(fig)
-```
-
 ### Acciones climaticas
 
 ```{python}
 #| title: "Que acciones tomamos?"
-acc_counts = df["accion_climatica"].value_counts().reset_index()
-acc_counts.columns = ["accion", "count"]
+from collections import Counter
+all_acciones = [a for persona in acciones_por_persona for a in persona]
+acc_flat = Counter(all_acciones)
+acc_counts = pd.DataFrame(acc_flat.items(), columns=["accion", "count"]).sort_values("count", ascending=False)
 
 fig = go.Figure(go.Treemap(
     labels=acc_counts["accion"],

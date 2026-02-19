@@ -85,304 +85,299 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="plan-dashboard-conoce-a-la-comunidad-hackods" class="level1">
-<h1>Plan: Dashboard “Conoce a la Comunidad HackODS”</h1>
+<section id="dashboard-conoce-a-la-comunidad-hackods" class="level1">
+<h1>Dashboard “Conoce a la Comunidad HackODS”</h1>
 <section id="contexto" class="level2">
 <h2 class="anchored" data-anchor-id="contexto">Contexto</h2>
-<p>El HackODS es un hackathon de visualización de ODS (Objetivos de Desarrollo Sostenible) organizado por la UNAM, donde participan <strong>150 personas en 50 equipos</strong> usando Quarto, Python, GitHub Pages y Plotly.</p>
-<p><strong>Objetivo del dashboard</strong>: Presentar un retrato interactivo de la comunidad HackODS — quiénes son, de dónde vienen, qué saben hacer, qué les importa del planeta y qué cosas curiosas/geek les definen. Es un “conócenos” visual.</p>
-<p><strong>Audiencia</strong>: Participantes, comunidad del hackathon, juventudes y comunidad unam.</p>
-<p><strong>Datos</strong>: Aún no existen. Se diseña la estructura con datos simulados realistas que después se reemplazan con datos reales de registro mediante un formulario que se diseñara en google forms.</p>
+<p>Hackathon de visualización de ODS organizado por la UNAM. <strong>150 personas en 50 equipos</strong> usando Quarto, Python, GitHub Pages y Plotly.</p>
+<p><strong>Objetivo</strong>: Retrato interactivo de la comunidad — quiénes son, de dónde vienen, qué saben hacer, qué les importa y qué les define.</p>
+<p><strong>Datos</strong>: Simulados con <code>numpy</code> (seed 42). Se reemplazarán con datos reales de un formulario Google Forms.</p>
 <hr>
 </section>
-<section id="arco-narrativo-storytelling-with-data" class="level2">
-<h2 class="anchored" data-anchor-id="arco-narrativo-storytelling-with-data">Arco narrativo (Storytelling with Data)</h2>
-<p>El dashboard sigue un arco de <strong>presentación progresiva</strong> — de lo general a lo personal:</p>
-<pre><code>GANCHO          →  IDENTIDAD        →  CAPACIDAD          →  PROPÓSITO        →  HUMANIDAD
-"Somos 150"        "¿De qué estado?"   "¿Qué nivel tenemos   "¿Qué nos mueve?"   "¿Quiénes somos
-                   "¿De qué área?"      en Python, Quarto     "¿Qué ODS?"         de verdad?"
-                                         y GitHub Pages?"</code></pre>
-<p>Cada página responde UNA pregunta central y cierra con un insight memorable.</p>
-<hr>
-</section>
-<section id="estilo-visual" class="level2">
-<h2 class="anchored" data-anchor-id="estilo-visual">Estilo visual</h2>
-<ul>
-<li><strong>Paleta HackODS</strong>: Negro <code>#000000</code>, Naranja <code>#ff9b10</code>, Blanco <code>#ffffff</code></li>
-<li><strong>Tipografía</strong>: Inter (cuerpo), Space Grotesk (títulos)</li>
-<li><strong>Gráficos ODS</strong>: Colores oficiales de los 17 ODS cuando se muestren</li>
-<li><strong>Navbar</strong>: Negro con borde naranja inferior</li>
-<li><strong>Cards</strong>: Fondo <code>#f9fafb</code>, bordes redondeados 12px</li>
-<li><strong>Lenguaje</strong>: Español inclusivo (no binarie, “participantes”, sin “sexo”)</li>
-<li><strong>Logo</strong>: usa el logo.png</li>
-</ul>
-<hr>
-</section>
-<section id="estructura-5-páginas" class="level2">
-<h2 class="anchored" data-anchor-id="estructura-5-páginas">Estructura: 5 páginas</h2>
-<hr>
-<section id="página-1-panorama-general" class="level3">
-<h3 class="anchored" data-anchor-id="página-1-panorama-general">PÁGINA 1: “Panorama General”</h3>
-<p><strong>Pregunta</strong>: ¿Qué tan grande y diversa es esta comunidad? <strong>Propósito</strong>: El gancho. Números grandes que impacten al primer vistazo.</p>
-<section id="layout" class="level4">
-<h4 class="anchored" data-anchor-id="layout">Layout</h4>
-<pre><code>Row 1 (25%) — 4 Value Boxes
-┌──────────────┬──────────────┬──────────────┬──────────────┐
-│ 150          │ 50           │ 15+          │ 6            │
-│ Participantes│ Equipos      │ Estados      │ Áreas de     │
-│              │              │              │ conocimiento │
-└──────────────┴──────────────┴──────────────┴──────────────┘
-
-Row 2 (40%) — 2 Cards
-┌─────────────────────────────┬─────────────────────────────┐
-│ DONUT: Identidad de género  │ HISTOGRAMA: Distribución    │
-│ (Mujer/Hombre/No binarie/  │ de edad (barras por rango,  │
-│  Prefiero no decir)         │ línea de promedio ~23 años) │
-│ Centro: "150 personas"      │                             │
-└─────────────────────────────┴─────────────────────────────┘
-
-Row 3 (35%) — 2 Cards
-┌─────────────────────────────────────┬───────────────────────┐
-│ BARRAS HORIZONTALES:                │ CARD TEXTO:           │
-│ Top áreas de conocimiento           │ "Lo que nos une"      │
-│ (Ciencias, Humanidades, Ingenierías,│ Párrafo narrativo     │
-│  Artes, Ciencias Sociales, Salud)   │ con insight clave     │
-│ (la #1 resaltada en negro,          │                       │
-│  resto en naranja)                  │                       │
-└─────────────────────────────────────┴───────────────────────┘</code></pre>
-<p><strong>Value Boxes</strong>: | Métrica | Valor | Icono | |———|——-|——-| | Participantes | 150 | <code>people-fill</code> | | Equipos | 50 | <code>collection-fill</code> | | Estados | 15+ | <code>geo-alt-fill</code> | | Áreas de conocimiento | 6 | <code>mortarboard-fill</code> |</p>
-<p><strong>Insight de cierre</strong>: “Desde ingenierías hasta humanidades, 150 personas de 15+ estados se organizan en 50 equipos para hackear los ODS.”</p>
-</section>
-<section id="patrón-de-layout-aplica-a-todas-las-páginas" class="level4">
-<h4 class="anchored" data-anchor-id="patrón-de-layout-aplica-a-todas-las-páginas">Patrón de layout (aplica a todas las páginas)</h4>
-<p>Cada página usa un solo <code>## Row {.tabset .fill}</code> donde todo el contenido se organiza en pestañas. Esto reemplaza el layout multi-row del plan original.</p>
-<p><strong>Ejemplo — Panorama General:</strong></p>
+<section id="arquitectura" class="level2">
+<h2 class="anchored" data-anchor-id="arquitectura">Arquitectura</h2>
+<p>Un solo archivo <code>index.qmd</code> con todo. La primera celda Python genera datos simulados y define <code>hackods_fig()</code> para estilo Plotly. Cada <code>#</code> de nivel 1 crea una página en el dashboard.</p>
 <table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Pestaña</th>
-<th>Contenido</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>“Totales”</td>
-<td>4 value boxes</td>
-</tr>
-<tr class="even">
-<td>“Identidad de genero”</td>
-<td>Barra apilada horizontal</td>
-</tr>
-<tr class="odd">
-<td>“Distribucion de edad”</td>
-<td>Histograma con línea promedio</td>
-</tr>
-<tr class="even">
-<td>“Areas de conocimiento”</td>
-<td>Barras horizontales</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Regla</strong>: Al desarrollar las siguientes secciones, seguir este mismo patrón — un tabset por página, una visualización por pestaña.</p>
-<hr>
-</section>
-</section>
-<section id="página-2-quiénes-somos" class="level3">
-<h3 class="anchored" data-anchor-id="página-2-quiénes-somos">PÁGINA 2: “¿Quiénes somos?”</h3>
-<p><strong>Pregunta</strong>: ¿De dónde venimos y qué tan diversa es la comunidad? <strong>Propósito</strong>: Profundizar en la identidad — geografía, áreas de conocimiento, composición.</p>
-<section id="layout-1" class="level4">
-<h4 class="anchored" data-anchor-id="layout-1">Layout</h4>
-<pre><code>Row 1 (15%) — 4 Value Boxes
-┌──────────────┬──────────────┬──────────────┬──────────────┐
-│ 23 años      │ CDMX         │ Ciencias     │ 44%          │
-│ Edad promedio│ Estado #1    │ Área #1      │ Mujeres      │
-└──────────────┴──────────────┴──────────────┴──────────────┘
-
-Row 2 (45%) — 2 Cards
-┌─────────────────────────────┬─────────────────────────────┐
-│ TREEMAP: "¿De qué estado    │ BARRAS AGRUPADAS:           │
-│ venimos?"                   │ Género × Área de            │
-│ Estado &gt; Ciudad/Municipio   │ conocimiento                │
-│ Tamaño = # participantes    │ Un color por identidad      │
-│                             │ de género                   │
-└─────────────────────────────┴─────────────────────────────┘
-
-Row 3 (40%) — Tabset con 3 pestañas
-┌─────────────────────────────────────────────────────────────┐
-│ [Edad y género] [Áreas de conocimiento] [Mapa geográfico]  │
-│                                                             │
-│ Tab 1: Box plot edad por identidad de género                │
-│ Tab 2: Barras horizontales de las 6 áreas con %             │
-│         (Ciencias, Humanidades, Ingenierías, Artes,         │
-│          Ciencias Sociales, Salud)                          │
-│ Tab 3: Sunburst Estado &gt; Ciudad (vista alternativa)         │
-└─────────────────────────────────────────────────────────────┘</code></pre>
-<hr>
-</section>
-</section>
-<section id="página-3-nuestras-herramientas" class="level3">
-<h3 class="anchored" data-anchor-id="página-3-nuestras-herramientas">PÁGINA 3: “Nuestras herramientas”</h3>
-<p><strong>Pregunta</strong>: ¿Qué nivel de conocimiento tenemos en las herramientas del hackathon? <strong>Propósito</strong>: Mostrar el punto de partida técnico de la comunidad en Python, Quarto y GitHub Pages. Somos una comunidad que aprende junta.</p>
-<section id="layout-2" class="level4">
-<h4 class="anchored" data-anchor-id="layout-2">Layout</h4>
-<pre><code>Row 1 (15%) — 3 Value Boxes
-┌──────────────────┬──────────────────┬──────────────────┐
-│ 75%              │ 45%              │ 38%              │
-│ Python           │ Quarto           │ GitHub Pages     │
-│ Intermedio+      │ Intermedio+      │ Intermedio+      │
-└──────────────────┴──────────────────┴──────────────────┘
-
-Row 2 (45%) — 1 Card (ancho completo)
-┌─────────────────────────────────────────────────────────────┐
-│ 3 BARRAS APILADAS HORIZONTALES (una por herramienta):       │
-│                                                             │
-│ Python       ██████████████████████████████████████████████ │
-│              Nunca lo usé | Principiante | Intermedio | Av. │
-│                                                             │
-│ Quarto       ██████████████████████████████████████████████ │
-│              Nunca lo usé | Principiante | Intermedio | Av. │
-│                                                             │
-│ GitHub Pages ██████████████████████████████████████████████ │
-│              Nunca lo usé | Principiante | Intermedio | Av. │
-│                                                             │
-│ Cada segmento muestra % dentro                              │
-└─────────────────────────────────────────────────────────────┘
-
-Row 3 (40%) — Tabset con 3 pestañas
-┌─────────────────────────────────────────────────────────────┐
-│ [Python × Área] [Quarto × Área] [GitHub Pages × Área]      │
-│                                                             │
-│ Tab 1: Heatmap — nivel de Python por área de conocimiento   │
-│ Tab 2: Heatmap — nivel de Quarto por área de conocimiento   │
-│ Tab 3: Heatmap — nivel de GitHub Pages por área de conoc.   │
-│         (filas=áreas, columnas=niveles, color=intensidad)   │
-└─────────────────────────────────────────────────────────────┘</code></pre>
-<p><strong>Niveles para cada herramienta</strong>: - <strong>Python</strong>: Nunca lo usé / Principiante / Intermedio / Avanzado - <strong>Quarto</strong>: Nunca lo usé / Principiante / Intermedio / Avanzado - <strong>GitHub Pages</strong>: Nunca lo usé / Principiante / Intermedio / Avanzado</p>
-<hr>
-</section>
-</section>
-<section id="página-4-nuestro-planeta" class="level3">
-<h3 class="anchored" data-anchor-id="página-4-nuestro-planeta">PÁGINA 4: “Nuestro planeta”</h3>
-<p><strong>Pregunta</strong>: ¿Qué nos mueve? ¿Qué ODS nos importan? ¿Qué hacemos por el planeta? <strong>Propósito</strong>: El corazón temático. Conectar la comunidad con los ODS y el compromiso ambiental.</p>
-<section id="layout-3" class="level4">
-<h4 class="anchored" data-anchor-id="layout-3">Layout</h4>
-<pre><code>Row 1 (15%) — 4 Value Boxes
-┌──────────────┬──────────────┬──────────────┬──────────────┐
-│ ODS 13       │ 62%          │ 47%          │ 2.3          │
-│ Acción       │ Reciclan     │ Conocen su   │ Hábitos      │
-│ Climática #1 │              │ huella CO₂   │ sostenibles  │
-└──────────────┴──────────────┴──────────────┴──────────────┘
-
-Row 2 (50%) — 2 Cards
-┌─────────────────────────────┬─────────────────────────────┐
-│ TREEMAP: "¿Qué ODS nos      │ BARRAS HORIZONTALES:        │
-│ importa más?"               │ "¿Qué hacemos por el        │
-│ Un rectángulo por ODS       │  planeta?"                  │
-│ COLOR = color oficial ODS   │ Hábitos sostenibles         │
-│ TAMAÑO = # votos            │ ordenados por frecuencia    │
-└─────────────────────────────┴─────────────────────────────┘
-
-Row 3 (35%) — Tabset con 3 pestañas
-┌─────────────────────────────────────────────────────────────┐
-│ [Huella de carbono] [Acciones climáticas] [ODS × Área]     │
-│                                                             │
-│ Tab 1: Donut — nivel de conciencia sobre huella de carbono  │
-│ Tab 2: Barras horizontales — acciones climáticas tomadas    │
-│ Tab 3: Heatmap — qué ODS importa a cada área de conoc.     │
-│         (filas=áreas, columnas=ODS, color=intensidad)       │
-└─────────────────────────────────────────────────────────────┘</code></pre>
-<p><strong>Colores especiales</strong>: Los gráficos de ODS usan la paleta oficial de la ONU (17 colores).</p>
-<hr>
-</section>
-</section>
-<section id="página-5-el-lado-humano" class="level3">
-<h3 class="anchored" data-anchor-id="página-5-el-lado-humano">PÁGINA 5: “El lado humano”</h3>
-<p><strong>Pregunta</strong>: ¿Quiénes somos cuando no estamos codeando? <strong>Propósito</strong>: Cerrar con calidez, humor y datos que generen identificación y se compartan.</p>
-<section id="layout-4" class="level4">
-<h4 class="anchored" data-anchor-id="layout-4">Layout</h4>
-<pre><code>Row 1 (15%) — 4 Value Boxes
-┌──────────────┬──────────────┬──────────────┬──────────────┐
-│ 4.5 hrs      │ Pizza        │ Ajolote      │ No dormir    │
-│ Horas de     │ Snack #1     │ Animal       │ nunca        │
-│ sueño        │              │ espíritu #1  │ Superpoder   │
-└──────────────┴──────────────┴──────────────┴──────────────┘
-
-Row 2 (45%) — 2 Cards
-┌─────────────────────────────┬─────────────────────────────┐
-│ DONUT: "¿Qué escuchamos     │ BARRAS HORIZONTALES:        │
-│ mientras hackeamos?"         │ "Tu animal espíritu en      │
-│ Géneros musicales           │  reuniones"                 │
-│ Centro: "150 playlists"     │ Con emojis en labels        │
-│ Segmento top resaltado      │ Colores alternados          │
-└─────────────────────────────┴─────────────────────────────┘
-
-Row 3 (40%) — Tabset con 3 pestañas
-┌─────────────────────────────────────────────────────────────┐
-│ [Snacks] [Horas de sueño] [Superpoderes]                   │
-│                                                             │
-│ Tab 1: Treemap — snacks del hackathon                       │
-│ Tab 2: Histograma — horas de sueño con anotaciones          │
-│         ("zombies" a la izquierda, "bebés" a la derecha)    │
-│ Tab 3: Barras horizontales — superpoderes deseados          │
-└─────────────────────────────────────────────────────────────┘</code></pre>
-<hr>
-</section>
-</section>
-</section>
-<section id="archivos-a-crearmodificar" class="level2">
-<h2 class="anchored" data-anchor-id="archivos-a-crearmodificar">Archivos a crear/modificar</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 30%">
-<col style="width: 26%">
-<col style="width: 43%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Archivo</th>
-<th>Acción</th>
 <th>Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>_quarto.yml</code></td>
-<td>Crear</td>
-<td>Config del proyecto (website, output: docs/)</td>
+<td>Config del proyecto (website, output: <code>docs/</code>)</td>
 </tr>
 <tr class="even">
 <td><code>index.qmd</code></td>
-<td>Crear</td>
-<td>Dashboard completo: YAML header + celda Python setup + 5 páginas</td>
+<td>Dashboard completo: YAML + setup Python + 5 páginas</td>
 </tr>
 <tr class="odd">
 <td><code>custom.scss</code></td>
-<td>Crear</td>
-<td>Tema HackODS (colores, tipografía, cards, navbar)</td>
+<td>Tema HackODS (colores, tipografía, navbar)</td>
 </tr>
 <tr class="even">
 <td><code>style.css</code></td>
-<td>Crear</td>
-<td>CSS adicional para contenedores Plotly y ajustes finos</td>
-</tr>
-<tr class="odd">
-<td><code>pyproject.toml</code></td>
-<td>Editar</td>
-<td>Agregar <code>numpy</code> a dependencias</td>
+<td>CSS adicional para Plotly y ajustes finos</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Arquitectura clave</strong>: Un solo archivo <code>index.qmd</code> con todo. La primera celda Python genera todos los datos simulados y define la función <code>hackods_fig()</code> que aplica el estilo de marca a cada gráfico Plotly. Cada <code>#</code> de nivel 1 crea una página/pestaña en el dashboard.</p>
 <hr>
+</section>
+<section id="patrón-de-layout" class="level2">
+<h2 class="anchored" data-anchor-id="patrón-de-layout">Patrón de layout</h2>
+<p><strong>Todas las páginas</strong> usan un solo <code>## Row {.tabset .fill}</code> con una visualización por pestaña. La primera pestaña siempre es “Totales” con value boxes.</p>
+<pre><code># Nombre de página
+## Row {.tabset .fill}
+### Totales        ← value boxes
+### Pestaña 2      ← una gráfica
+### Pestaña 3      ← una gráfica
+...</code></pre>
+<p>Cada pestaña transmite <strong>un concepto simple</strong>, expresado como pregunta directa en el título.</p>
+<hr>
+</section>
+<section id="estilo-visual" class="level2">
+<h2 class="anchored" data-anchor-id="estilo-visual">Estilo visual</h2>
+<ul>
+<li><strong>Paleta</strong>: Colores ODS (<code>ODS_BLUE #0a97d9</code>, <code>ODS_GREEN #4CA146</code>, <code>ODS_RED #E5233D</code>, etc.)</li>
+<li><strong>Paleta categórica</strong>: <code>HACKODS_CAT</code> (10 colores ODS)</li>
+<li><strong>Paleta secuencial</strong>: <code>HACKODS_SEQ</code> (azules de claro a oscuro)</li>
+<li><strong>Tipografía</strong>: Inter (cuerpo), Space Grotesk (títulos)</li>
+<li><strong>Lenguaje</strong>: Español inclusivo (“participantes”, “No binarie”, sin “sexo”)</li>
+<li><strong>Logo</strong>: <code>logo.png</code></li>
+<li><strong>Función de estilo</strong>: <code>hackods_fig(fig, title="")</code> aplica marca a toda figura Plotly</li>
+</ul>
+<hr>
+</section>
+<section id="estructura-5-páginas" class="level2">
+<h2 class="anchored" data-anchor-id="estructura-5-páginas">Estructura: 5 páginas</h2>
+<section id="página-1-panorama-general" class="level3">
+<h3 class="anchored" data-anchor-id="página-1-panorama-general">PÁGINA 1: Panorama General</h3>
+<p><strong>Pregunta</strong>: ¿Qué tan grande y diversa es esta comunidad?</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 32%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pestaña</th>
+<th>Gráfica</th>
+<th>Concepto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Totales</td>
+<td>4 value boxes</td>
+<td>Participantes, Equipos, Estados, Áreas</td>
+</tr>
+<tr class="even">
+<td>Identidad de genero</td>
+<td>Barra apilada 100% horizontal</td>
+<td>Proporción por género</td>
+</tr>
+<tr class="odd">
+<td>Distribucion de edad</td>
+<td>Histograma + línea promedio</td>
+<td>Rango de edades</td>
+</tr>
+<tr class="even">
+<td>Areas de conocimiento</td>
+<td>Barras horizontales</td>
+<td>Top áreas (#1 en rojo)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="página-2-quienes-somos" class="level3">
+<h3 class="anchored" data-anchor-id="página-2-quienes-somos">PÁGINA 2: Quienes somos?</h3>
+<p><strong>Pregunta</strong>: ¿De dónde venimos y qué tan diversa es la comunidad?</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 32%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pestaña</th>
+<th>Gráfica</th>
+<th>Concepto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Totales</td>
+<td>4 value boxes</td>
+<td>Edad promedio, Estado #1, Área #1, % Mujeres</td>
+</tr>
+<tr class="even">
+<td>De que estado venimos?</td>
+<td>Treemap</td>
+<td>Distribución geográfica</td>
+</tr>
+<tr class="odd">
+<td>Genero por area</td>
+<td>Barra apilada 100% horizontal</td>
+<td>Proporción género × área</td>
+</tr>
+<tr class="even">
+<td>Mapa geografico</td>
+<td>Coroplético (GeoJSON)</td>
+<td>México con estados coloreados por participantes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mapa</strong>: Usa <code>go.Choropleth</code> con GeoJSON externo de estados mexicanos. Matching de nombres normalizado (sin acentos). <code>fitbounds="geojson"</code>, <code>visible=False</code> para mostrar solo México.</p>
+</section>
+<section id="página-3-nuestras-herramientas" class="level3">
+<h3 class="anchored" data-anchor-id="página-3-nuestras-herramientas">PÁGINA 3: Nuestras herramientas</h3>
+<p><strong>Pregunta</strong>: ¿Cuántos saben Python, Quarto y GitHub Pages?</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 32%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pestaña</th>
+<th>Gráfica</th>
+<th>Concepto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Totales</td>
+<td>3 value boxes</td>
+<td>“X de 150” saben cada herramienta (cualquier nivel ≠ “Nunca lo use”)</td>
+</tr>
+<tr class="even">
+<td>Python</td>
+<td>Barra apilada 100%</td>
+<td>Distribución de niveles</td>
+</tr>
+<tr class="odd">
+<td>Quarto</td>
+<td>Barra apilada 100%</td>
+<td>Distribución de niveles</td>
+</tr>
+<tr class="even">
+<td>GitHub Pages</td>
+<td>Barra apilada 100%</td>
+<td>Distribución de niveles</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Niveles</strong>: Nunca lo use / Principiante / Intermedio / Avanzado (colores en <code>LEVEL_COLORS</code>).</p>
+</section>
+<section id="página-4-nuestro-planeta" class="level3">
+<h3 class="anchored" data-anchor-id="página-4-nuestro-planeta">PÁGINA 4: Nuestro planeta</h3>
+<p><strong>Pregunta</strong>: ¿Qué ODS nos importan? ¿Qué hacemos por el planeta?</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 32%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pestaña</th>
+<th>Gráfica</th>
+<th>Concepto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Totales</td>
+<td>4 value boxes</td>
+<td>ODS top, % reciclan, % conocen huella CO₂, hábitos promedio</td>
+</tr>
+<tr class="even">
+<td>ODS favoritos</td>
+<td>Treemap (colores oficiales ODS)</td>
+<td>Qué ODS nos importa más</td>
+</tr>
+<tr class="odd">
+<td>Habitos sostenibles</td>
+<td>Treemap</td>
+<td>Qué hacemos por el planeta</td>
+</tr>
+<tr class="even">
+<td>Huella de carbono</td>
+<td>Treemap</td>
+<td>Nivel de conciencia sobre CO₂</td>
+</tr>
+<tr class="odd">
+<td>Acciones climaticas</td>
+<td>Treemap</td>
+<td>Qué acciones tomamos</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="página-5-el-lado-humano" class="level3">
+<h3 class="anchored" data-anchor-id="página-5-el-lado-humano">PÁGINA 5: El lado humano</h3>
+<p><strong>Pregunta</strong>: ¿Quiénes somos cuando no estamos codeando?</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 32%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pestaña</th>
+<th>Gráfica</th>
+<th>Concepto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Totales</td>
+<td>4 value boxes</td>
+<td>Horas sueño, Snack #1, Animal #1, Superpoder #1</td>
+</tr>
+<tr class="even">
+<td>Musica para hackear</td>
+<td>Donut (hole=0.5)</td>
+<td>Qué escuchamos</td>
+</tr>
+<tr class="odd">
+<td>Animal espiritu</td>
+<td>Barras horizontales con emojis</td>
+<td>Tu animal en reuniones</td>
+</tr>
+<tr class="even">
+<td>Snacks del hackathon</td>
+<td>Treemap</td>
+<td>Qué comemos</td>
+</tr>
+<tr class="odd">
+<td>Horas de sueno</td>
+<td>Histograma + anotaciones</td>
+<td>Cuánto dormimos (“Zombies” / “Duermen como bebes”)</td>
+</tr>
+<tr class="even">
+<td>Superpoderes</td>
+<td>Barras horizontales</td>
+<td>Qué superpoder querrías</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
 </section>
 <section id="verificación" class="level2">
 <h2 class="anchored" data-anchor-id="verificación">Verificación</h2>
 <ol type="1">
-<li><code>uv sync</code> — instalar dependencias (numpy)</li>
-<li><code>quarto render</code> — renderizar el dashboard</li>
-<li>Abrir <code>docs/index.html</code> en navegador</li>
-<li>Verificar: 5 pestañas de navegación, value boxes visibles, gráficos interactivos, colores correctos, lenguaje inclusivo</li>
-<li>Probar responsividad (redimensionar ventana)</li>
+<li><code>uv sync</code> — instalar dependencias</li>
+<li><code>quarto render</code> — renderizar</li>
+<li>Abrir <code>docs/index.html</code></li>
+<li>Verificar: 5 páginas, tabsets funcionales, gráficos interactivos, colores correctos</li>
 </ol>
 
 

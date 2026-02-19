@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"\\(Get-Content ''C:\\\\Users\\\\gbv\\\\storytelling\\\\CUESTIONARIO_light.md'' -Raw\\).Length\")",
+      "Bash(dir:*)",
+      "Bash(test:*)",
+      "Bash(bash -c 'ls')",
+      "Bash(echo:*)",
+      "Bash(python3:*)",
+      "Bash(python:*)"
+    ]
+  }
+}

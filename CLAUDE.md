@@ -72,7 +72,6 @@ Cada pestaña transmite **un concepto simple**, expresado como pregunta directa 
 | Pestaña | Gráfica | Concepto |
 |---------|---------|----------|
 | Totales | 4 value boxes | Edad promedio, Estado #1, Área #1, % Mujeres |
-| De que estado venimos? | Treemap | Distribución geográfica |
 | Genero por area | Barra apilada 100% horizontal | Proporción género × área |
 | Mapa geografico | Coroplético (GeoJSON) | México con estados coloreados por participantes |
 
