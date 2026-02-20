@@ -1,3 +1,8 @@
+/* Fix Plotly legend clipping in Quarto dashboards */
+.legend .scrollbox {
+  clip-path: none !important;
+}
+
 /* Plotly charts fill container */
 .js-plotly-plot,
 .plotly-graph-div,
@@ -17,6 +22,10 @@
 
 .tab-pane .valuebox .valuebox-icon {
   font-size: 3rem !important;
+}
+
+.small-value .valuebox-value {
+  font-size: 2rem !important;
 }
 
 /* Narrative card styling */

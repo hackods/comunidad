@@ -53,7 +53,7 @@ HACKODS_CAT = [ODS_BLUE, ODS_RED, ODS_GREEN, ODS_ORANGE, ODS_PINK, ODS_YELLOW, O
 HACKODS_SEQ = ["#e0f4fd", "#b3e5fc", "#7dd3f7", "#4fc3f7", "#0a97d9", "#0277bd", "#01579b"]
 
 LEVEL_COLORS = {
-    "Nunca lo use": "#e5e7eb",
+    "Nunca lo usé": "#e5e7eb",
     "Principiante": "#7dd3f7",
     "Intermedio": "#0a97d9",
     "Avanzado": "#01579b",
@@ -69,10 +69,10 @@ SDG_COLORS = {
 
 SDG_NAMES = {
     1: "Fin de la pobreza", 2: "Hambre cero", 3: "Salud y bienestar",
-    4: "Educacion de calidad", 5: "Igualdad de genero", 6: "Agua limpia",
-    7: "Energia asequible", 8: "Trabajo decente", 9: "Industria e innovacion",
-    10: "Reduccion de desigualdades", 11: "Ciudades sostenibles",
-    12: "Produccion responsable", 13: "Accion por el clima",
+    4: "Educación de calidad", 5: "Igualdad de género", 6: "Agua limpia",
+    7: "Energía asequible", 8: "Trabajo decente", 9: "Industria e innovación",
+    10: "Reducción de desigualdades", 11: "Ciudades sostenibles",
+    12: "Producción responsable", 13: "Acción por el clima",
     14: "Vida submarina", 15: "Vida de ecosistemas terrestres",
     16: "Paz, justicia e instituciones", 17: "Alianzas para los objetivos",
 }
@@ -137,7 +137,7 @@ df["horas_sueno"] = pd.to_numeric(df["horas_sueno"], errors="coerce").fillna(0)
 
 # --- Normalizar niveles (acentos) ---
 _nivel_clean = {
-    "Nunca lo usé": "Nunca lo use", "Nunca lo use": "Nunca lo use",
+    "Nunca lo usé": "Nunca lo usé", "Nunca lo use": "Nunca lo usé",
     "Principiante": "Principiante", "Intermedio": "Intermedio", "Avanzado": "Avanzado",
 }
 for _col in ["python_nivel", "quarto_nivel", "github_nivel"]:
@@ -195,9 +195,9 @@ n_estados = df["estado"].nunique()
 n_areas = df["area"].nunique()
 ```
 
-# Panorama General {scrolling="false"}
+# Panorama General 
 
-## Row {.tabset .fill}
+## Row {.tabset }
 
 ### Totales
 
@@ -221,59 +221,54 @@ dict(icon="geo-alt-fill", color="#E5233D", value=f"{n_estados}")
 
 ```{python}
 #| content: valuebox
-#| title: "Areas de conocimiento"
+#| title: "Áreas de conocimiento"
 dict(icon="mortarboard-fill", color="#F26A2D", value=n_areas)
 ```
 
 ### Me identifico como
 
 ```{python}
-#| title: "Me identifico como"
 gen_colors_map = {"Mujer": ODS_BLUE, "Hombre": ODS_GREEN, "No binarie": ODS_ORANGE, "Prefiero no decirlo": MEDIUM_GRAY, "Otro": ODS_TEAL}
 gen_order = ["Mujer", "Hombre", "No binarie", "Prefiero no decirlo", "Otro"]
 gen_counts = df["genero"].value_counts()
 
-traces = []
+COLS, ROWS = 15, 10
+sorted_genders = []
 for gen in gen_order:
+    sorted_genders.extend([gen] * gen_counts.get(gen, 0))
+
+fig = go.Figure()
+seen = set()
+for i, gen in enumerate(sorted_genders):
+    col = i % COLS
+    row = ROWS - 1 - i // COLS
+    show = gen not in seen
+    seen.add(gen)
     count = gen_counts.get(gen, 0)
     pct = count / N * 100
-    traces.append(go.Bar(
-        x=[""],
-        y=[pct],
-        name=gen,
-        marker_color=gen_colors_map[gen],
-        hovertemplate=f"{gen}: {count} personas ({pct:.0f}%)<extra></extra>",
-        showlegend=False,
+    _ = fig.add_trace(go.Scatter(
+        x=[col], y=[row],
+        mode="markers",
+        marker=dict(symbol="square", size=28, color=gen_colors_map[gen], line=dict(width=0.5, color=WHITE)),
+        name=f"{gen} — {count} ({pct:.0f}%)",
+        legendgroup=gen,
+        showlegend=show,
+        hovertemplate=f"{gen}: {count} ({pct:.0f}%)<extra></extra>",
     ))
 
-fig = go.Figure(data=traces, layout=dict(
-    barmode="stack",
-    xaxis=dict(showticklabels=False, showgrid=False),
-    yaxis=dict(showgrid=False, showticklabels=False, range=[0, 100]),
-))
-
-# Anotaciones sobre cada segmento
-cumulative = 0
-for gen in gen_order:
-    count = gen_counts.get(gen, 0)
-    pct = count / N * 100
-    mid = cumulative + pct / 2
-    _ = fig.add_annotation(
-        x=0, y=mid,
-        text=f"<b>{gen}</b><br>{count} · {pct:.0f}%",
-        showarrow=False,
-        font=dict(color=WHITE, size=13),
-        xanchor="center",
-    )
-    cumulative += pct
-
-hackods_fig(fig, "Me identifico como")
+_ = hackods_fig(fig, "")
+fig.update_layout(
+    xaxis=dict(visible=False, range=[-0.6, COLS - 0.4]),
+    yaxis=dict(visible=False, range=[-0.6, ROWS - 0.4]),
+    legend=dict(orientation="h", x=0.49, xanchor="left", y=0.6, yanchor="middle", entrywidth=150),
+    plot_bgcolor=WHITE,
+    height=350,
+)
 ```
 
-### Distribucion de edad
+### Distribución de edad
 
 ```{python}
-#| title: "Distribucion de edad"
 fig = go.Figure(go.Histogram(
     x=df["edad"],
     nbinsx=12,
@@ -283,7 +278,7 @@ fig = go.Figure(go.Histogram(
 ))
 mean_age = df["edad"].mean()
 _ = fig.add_vline(x=mean_age, line_dash="dash", line_color=BLACK, line_width=2)
-_ = fig.add_annotation(text=f"Promedio: {mean_age:.0f} anios", x=mean_age + 1.5, y=0.95,
+_ = fig.add_annotation(text=f"Promedio: {mean_age:.0f} años", x=mean_age + 1.5, y=0.95,
                    yref="paper", showarrow=False,
                    font=dict(size=13, color=BLACK, family=TITLE_FONT))
 _ = fig.update_layout(bargap=0.15)
@@ -292,10 +287,9 @@ _ = fig.update_yaxes(title_text="Participantes", showgrid=True, gridcolor="#f3f4
 hackods_fig(fig)
 ```
 
-### Areas de conocimiento
+### Áreas de conocimiento
 
 ```{python}
-#| title: "Areas de conocimiento"
 area_counts = df["area"].value_counts().sort_values()
 colors_area = [ODS_BLUE] * len(area_counts)
 colors_area[-1] = ODS_RED
@@ -311,19 +305,19 @@ fig = go.Figure(go.Bar(
 ))
 _ = fig.update_xaxes(showgrid=False, showticklabels=False)
 _ = fig.update_yaxes(showgrid=False)
-hackods_fig(fig, "Areas de conocimiento")
+hackods_fig(fig, "")
 ```
 
-# Quienes somos?
+# ¿Quiénes somos?
 
-## Row {.tabset .fill}
+## Row {.tabset }
 
 ### Totales
 
 ```{python}
 #| content: valuebox
 #| title: "Edad promedio"
-dict(icon="calendar-heart", color="#0a97d9", value=f"{df['edad'].mean():.0f} anios")
+dict(icon="calendar-heart", color="#0a97d9", value=f"{df['edad'].mean():.0f} años")
 ```
 
 ```{python}
@@ -335,6 +329,7 @@ dict(icon="geo-alt-fill", color="#4CA146", value=df["estado"].value_counts().ind
 ```{python}
 #| content: valuebox
 #| title: "Area #1"
+#| classes: small-value
 dict(icon="book-fill", color="#E5233D", value=df["area"].value_counts().index[0])
 ```
 
@@ -345,10 +340,9 @@ pct_mujeres = (df["genero"] == "Mujer").mean() * 100
 dict(icon="person-fill", color="#F26A2D", value=f"{pct_mujeres:.0f}%")
 ```
 
-### Genero por area de conocimiento
+### Género por área de conocimiento
 
 ```{python}
-#| title: "Genero por area de conocimiento"
 cross = pd.crosstab(df["area"], df["genero"])
 cross = cross.reindex(columns=genero_opciones, fill_value=0)
 cross_pct = cross.div(cross.sum(axis=1), axis=0) * 100
@@ -383,10 +377,9 @@ _ = fig.update_yaxes(showgrid=False)
 hackods_fig(fig)
 ```
 
-### Mapa geografico
+### Mapa 
 
 ```{python}
-#| title: "Mapa geografico"
 import json
 import urllib.request
 import unicodedata
@@ -437,19 +430,20 @@ fig = go.Figure(go.Choropleth(
     locations=all_states["geo_name"],
     z=all_states["count"],
     featureidkey="properties.name",
-    colorscale=HACKODS_SEQ,
+    colorscale=[[0, WHITE]] + [[(i+1)/len(HACKODS_SEQ), c] for i, c in enumerate(HACKODS_SEQ)],
+    zmin=0,
     marker_line_color="#9ca3af",
     marker_line_width=1,
     showscale=True,
     colorbar=dict(title="Participantes", thickness=15, len=0.5),
     hovertemplate="<b>%{location}</b><br>%{z:.0f} personas<extra></extra>",
 ))
-fig.update_geos(
+_ = fig.update_geos(
     fitbounds="geojson",
     visible=False,
     bgcolor=WHITE,
 )
-hackods_fig(fig, "De donde venimos?")
+hackods_fig(fig, "¿De dónde venimos?")
 ```
 
 # Nuestras herramientas
@@ -461,21 +455,21 @@ hackods_fig(fig, "De donde venimos?")
 ```{python}
 #| content: valuebox
 #| title: "Saben Python"
-n_py = (df["python_nivel"] != "Nunca lo use").sum()
+n_py = (df["python_nivel"] != "Nunca lo usé").sum()
 dict(icon="filetype-py", color="#0a97d9", value=f"{n_py} de {N}")
 ```
 
 ```{python}
 #| content: valuebox
 #| title: "Saben Quarto"
-n_q = (df["quarto_nivel"] != "Nunca lo use").sum()
+n_q = (df["quarto_nivel"] != "Nunca lo usé").sum()
 dict(icon="file-earmark-code", color="#4CA146", value=f"{n_q} de {N}")
 ```
 
 ```{python}
 #| content: valuebox
 #| title: "Saben GitHub Pages"
-n_gh = (df["github_nivel"] != "Nunca lo use").sum()
+n_gh = (df["github_nivel"] != "Nunca lo usé").sum()
 dict(icon="github", color="#E5233D", value=f"{n_gh} de {N}")
 ```
 
@@ -483,7 +477,7 @@ dict(icon="github", color="#E5233D", value=f"{n_gh} de {N}")
 
 ```{python}
 #| title: "Nivel de Python"
-nivel_order = ["Nunca lo use", "Principiante", "Intermedio", "Avanzado"]
+nivel_order = ["Nunca lo usé", "Principiante", "Intermedio", "Avanzado"]
 py_counts = df["python_nivel"].value_counts().reindex(nivel_order, fill_value=0)
 py_pcts = py_counts / N * 100
 
@@ -583,14 +577,14 @@ hackods_fig(fig)
 ```
 
 # Nuestro planeta
-
+ 
 ## Row {.tabset .fill}
 
 ### Totales
 
 ```{python}
 #| content: valuebox
-#| title: "ODS mas votado"
+#| title: "ODS más votado"
 ods_top = df["ods_favorito"].value_counts().index[0]
 dict(icon="globe2", color=SDG_COLORS[ods_top], value=f"ODS {ods_top}: {SDG_NAMES[ods_top]}")
 ```
@@ -599,13 +593,13 @@ dict(icon="globe2", color=SDG_COLORS[ods_top], value=f"ODS {ods_top}: {SDG_NAMES
 #| content: valuebox
 #| title: "Reciclan"
 all_habitos = [h for persona in habitos_por_persona for h in persona]
-pct_recicla = sum(1 for p in habitos_por_persona if "Recicla" in p) / N * 100
+pct_recicla = sum(1 for p in habitos_por_persona if any("recicl" in h.lower() for h in p)) / N * 100
 dict(icon="recycle", color="#4CA146", value=f"{pct_recicla:.0f}%")
 ```
 
 ```{python}
 #| content: valuebox
-#| title: "Habitos sostenibles (prom.)"
+#| title: "Hábitos sostenibles (prom.)"
 avg_habitos = np.mean([len(h) for h in habitos_por_persona])
 dict(icon="tree-fill", color="#59BA48", value=f"{avg_habitos:.1f}")
 ```
@@ -613,7 +607,6 @@ dict(icon="tree-fill", color="#59BA48", value=f"{avg_habitos:.1f}")
 ### ODS favoritos
 
 ```{python}
-#| title: "Que ODS nos importa mas?"
 ods_counts = df["ods_favorito"].value_counts().sort_index().reset_index()
 ods_counts.columns = ["ods", "votos"]
 ods_counts["nombre"] = ods_counts["ods"].map(lambda x: f"ODS {x}: {SDG_NAMES[x]}")
@@ -625,16 +618,17 @@ fig = go.Figure(go.Treemap(
     values=ods_counts["votos"],
     marker_colors=ods_counts["color"],
     textinfo="label+value",
-    textfont=dict(size=13, color=WHITE),
+    textfont=dict(size=14, color=WHITE),
+    textposition="middle center",
     hovertemplate="<b>%{label}</b><br>%{value} votos<extra></extra>",
 ))
-hackods_fig(fig)
+_ = hackods_fig(fig)
+fig.update_layout(uniformtext=dict(minsize=10, mode="show"))
 ```
 
-### Habitos sostenibles
+### Hábitos sostenibles
 
 ```{python}
-#| title: "Que hacemos por el planeta?"
 from collections import Counter
 habitos_flat = Counter(all_habitos)
 hab_df = pd.DataFrame(habitos_flat.items(), columns=["habito", "count"]).sort_values("count", ascending=False)
@@ -645,16 +639,17 @@ fig = go.Figure(go.Treemap(
     values=hab_df["count"],
     marker_colors=HACKODS_CAT[:len(hab_df)],
     textinfo="label+value",
-    textfont=dict(size=13, color=WHITE),
+    textfont=dict(size=14, color=WHITE),
+    textposition="middle center",
     hovertemplate="<b>%{label}</b><br>%{value} personas<extra></extra>",
 ))
-hackods_fig(fig)
+_ = hackods_fig(fig)
+fig.update_layout(uniformtext=dict(minsize=10, mode="show"))
 ```
 
-### Acciones climaticas
+### Acciones climáticas
 
 ```{python}
-#| title: "Que acciones tomamos?"
 from collections import Counter
 all_acciones = [a for persona in acciones_por_persona for a in persona]
 acc_flat = Counter(all_acciones)
@@ -666,10 +661,12 @@ fig = go.Figure(go.Treemap(
     values=acc_counts["count"],
     marker_colors=HACKODS_CAT[:len(acc_counts)],
     textinfo="label+value",
-    textfont=dict(size=13, color=WHITE),
+    textfont=dict(size=14, color=WHITE),
+    textposition="middle center",
     hovertemplate="<b>%{label}</b><br>%{value} personas<extra></extra>",
 ))
-hackods_fig(fig)
+_ = hackods_fig(fig)
+fig.update_layout(uniformtext=dict(minsize=10, mode="show"))
 ```
 
 # El lado humano
@@ -680,7 +677,7 @@ hackods_fig(fig)
 
 ```{python}
 #| content: valuebox
-#| title: "Horas de sueno (prom.)"
+#| title: "Horas de sueño (prom.)"
 dict(icon="moon-stars-fill", color="#126A9F", value=f"{df['horas_sueno'].mean():.1f} hrs")
 ```
 
@@ -692,7 +689,7 @@ dict(icon="cup-hot-fill", color="#E5233D", value=df["snack"].value_counts().inde
 
 ```{python}
 #| content: valuebox
-#| title: "Animal espiritu #1"
+#| title: "Animal espíritu #1"
 dict(icon="bug-fill", color="#4CA146", value=df["animal_espiritu"].value_counts().index[0])
 ```
 
@@ -702,10 +699,9 @@ dict(icon="bug-fill", color="#4CA146", value=df["animal_espiritu"].value_counts(
 dict(icon="lightning-charge-fill", color="#F26A2D", value=df["superpoder"].value_counts().index[0])
 ```
 
-### Musica para hackear
+### Música para hackear
 
 ```{python}
-#| title: "Que escuchamos?"
 music_counts = df["genero_musical"].value_counts()
 pull_vals = [0.05 if i == 0 else 0 for i in range(len(music_counts))]
 
@@ -725,10 +721,9 @@ _ = fig.add_annotation(text=f"<b>{N}</b><br>playlists", x=0.5, y=0.5,
 hackods_fig(fig)
 ```
 
-### Animal espiritu
+### Animal espíritu
 
 ```{python}
-#| title: "Cual es tu animal en reuniones?"
 animal_counts = df["animal_espiritu"].value_counts().sort_values()
 animal_labels = [animal_emojis.get(a, a) for a in animal_counts.index]
 bar_colors = [HACKODS_CAT[i % len(HACKODS_CAT)] for i in range(len(animal_counts))]
@@ -750,7 +745,6 @@ hackods_fig(fig)
 ### Snacks del hackathon
 
 ```{python}
-#| title: "Que comemos mientras codeamos?"
 snack_counts = df["snack"].value_counts().reset_index()
 snack_counts.columns = ["snack", "count"]
 
@@ -760,15 +754,17 @@ fig = go.Figure(go.Treemap(
     values=snack_counts["count"],
     marker_colors=HACKODS_CAT[:len(snack_counts)],
     textinfo="label+value",
+    textfont=dict(size=14, color=WHITE),
+    textposition="middle center",
     hovertemplate="<b>%{label}</b><br>%{value} personas<extra></extra>",
 ))
-hackods_fig(fig)
+_ = hackods_fig(fig)
+fig.update_layout(uniformtext=dict(minsize=10, mode="show"))
 ```
 
-### Horas de sueno
+### Horas de sueño
 
 ```{python}
-#| title: "Cuanto dormimos?"
 fig = go.Figure(go.Histogram(
     x=df["horas_sueno"],
     nbinsx=10,
@@ -783,28 +779,29 @@ _ = fig.add_annotation(text=f"Promedio: {mean_sleep:.1f} hrs", x=mean_sleep + 0.
                    font=dict(size=13, color=BLACK, family=TITLE_FONT))
 _ = fig.add_annotation(text="Zombies", x=1.5, y=0.85, yref="paper",
                    showarrow=False, font=dict(size=11, color=MEDIUM_GRAY))
-_ = fig.add_annotation(text="Duermen como bebes", x=7.5, y=0.85, yref="paper",
+_ = fig.add_annotation(text="Duermen como bebés", x=7.5, y=0.85, yref="paper",
                    showarrow=False, font=dict(size=11, color=MEDIUM_GRAY))
 _ = fig.update_xaxes(title_text="Horas", showgrid=False)
 _ = fig.update_yaxes(title_text="Participantes", showgrid=True, gridcolor="#f3f4f6")
 hackods_fig(fig)
 ```
-
+ 
 ### Superpoderes
 
 ```{python}
-#| title: "Que superpoder querrias?"
-sp_counts = df["superpoder"].value_counts().sort_values()
-fig = go.Figure(go.Bar(
-    y=sp_counts.index,
-    x=sp_counts.values,
-    orientation="h",
-    marker_color=ODS_BLUE,
-    text=sp_counts.values,
-    textposition="outside",
-    hovertemplate="%{y}: %{x} votos<extra></extra>",
+sp_counts = df["superpoder"].value_counts().reset_index()
+sp_counts.columns = ["superpoder", "count"]
+
+fig = go.Figure(go.Treemap(
+    labels=sp_counts["superpoder"],
+    parents=[""] * len(sp_counts),
+    values=sp_counts["count"],
+    marker_colors=HACKODS_CAT[:len(sp_counts)],
+    textinfo="label+value",
+    textfont=dict(size=14, color=WHITE),
+    textposition="middle center",
+    hovertemplate="<b>%{label}</b><br>%{value} votos<extra></extra>",
 ))
-_ = fig.update_xaxes(showgrid=False, showticklabels=False)
-_ = fig.update_yaxes(showgrid=False)
-hackods_fig(fig)
+_ = hackods_fig(fig)
+fig.update_layout(uniformtext=dict(minsize=10, mode="show"))
 ```
